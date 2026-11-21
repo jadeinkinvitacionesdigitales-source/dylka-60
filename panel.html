@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de invitados · Dylka 60</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Pinyon+Script&family=Montserrat:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--noche:#0f0a09;--caja:rgba(26,18,16,.92);--cereza:#c8102e;--oro:#e9c46a;--texto:#fff8ee;--suave:#c9b9a6;--borde:#3a2a24;--ok:#3fae6a;--no:#e0555f;--espera:#c9a227}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',sans-serif;color:var(--texto);background:linear-gradient(180deg,rgba(15,10,9,.88),rgba(15,10,9,.96)),url("img/bg_leopard.webp") center/cover fixed;background-color:var(--noche);min-height:100vh;padding:24px 16px 60px}
+  .contenedor{max-width:860px;margin:0 auto}
+  header{text-align:center;margin-bottom:22px}
+  header h1{font-family:'Anton',sans-serif;font-weight:400;font-style:italic;font-size:3rem;line-height:1;text-shadow:4px 4px 0 var(--cereza)}
+  header .script{font-family:'Pinyon Script',cursive;font-size:1.9rem;color:var(--oro);line-height:1.2}
+  header p{font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;color:var(--suave);margin-top:4px}
+  .caja{background:var(--caja);border:1px solid var(--borde);border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-bottom:18px}
+  .caja h2{font-family:'Anton',sans-serif;font-weight:400;font-size:1.5rem;letter-spacing:.02em;margin-bottom:12px}
+  label{display:block;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--suave);margin-bottom:6px}
+  input,textarea,select{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--borde);font:inherit;font-size:.95rem;color:var(--texto);background:#120c0b}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--oro);box-shadow:0 0 0 3px rgba(233,196,106,.2)}
+  textarea{resize:vertical;min-height:96px;line-height:1.45}
+  .fila{display:grid;grid-template-columns:1fr 100px 150px 120px auto;gap:10px;align-items:end}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 18px;border-radius:30px;border:0;cursor:pointer;
+    font:inherit;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--texto);background:var(--cereza);white-space:nowrap;text-decoration:none}
+  .btn:hover{filter:brightness(1.1)}
+  .btn:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+  .btn.claro{background:transparent;color:var(--oro);border:1px solid var(--oro)}
+  .btn.wa{background:#25a35a}
+  .btn.peligro{background:transparent;color:var(--no);border:1px solid #5a2a2d}
+  .btn.mini{padding:7px 12px;font-size:.68rem}
+  .resumen{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:18px}
+  .dato{background:var(--caja);border:1px solid var(--borde);border-radius:16px;padding:12px 18px;text-align:center;min-width:120px}
+  .dato b{display:block;font-family:'Anton',sans-serif;font-weight:400;font-size:2rem;line-height:1.05}
+  .dato span{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--suave)}
+  .dato.ok b{color:var(--ok)} .dato.no b{color:var(--no)} .dato.espera b{color:var(--espera)}
+  .barra{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .barra input{max-width:260px}
+  .lista{display:flex;flex-direction:column;gap:10px}
+  .invitado{display:grid;grid-template-columns:1fr 80px 150px auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--borde);border-left:5px solid var(--espera);border-radius:14px;background:#140e0c}
+  .invitado.si{border-left-color:var(--ok)} .invitado.no{border-left-color:var(--no)}
+  .invitado input,.invitado select{padding:8px 10px}
+  .invitado .acciones{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+  .invitado .enlace{grid-column:1/-1;font-size:.72rem;color:var(--suave);word-break:break-all}
+  .vacio{text-align:center;color:var(--suave);padding:24px;font-style:italic}
+  .ayuda{font-size:.78rem;color:var(--suave);margin-top:8px;line-height:1.5}
+  .aviso{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--oro);color:#1a1210;font-weight:800;padding:12px 22px;border-radius:30px;font-size:.85rem;transition:transform .3s;z-index:9}
+  .aviso.ver{transform:translateX(-50%) translateY(0)}
+  @media (max-width:700px){
+    .fila{grid-template-columns:1fr 1fr}
+    .fila .nombre-campo{grid-column:1/-1}
+    .fila .btn{grid-column:1/-1}
+    .invitado{grid-template-columns:1fr 70px}
+    .invitado select{grid-column:1/-1}
+    .invitado .acciones{grid-column:1/-1;justify-content:flex-start}
+  }
+</style>
+</head>
+<body>
+<div class="contenedor">
+  <header>
+    <h1>DYLKA</h1>
+    <div class="script">Wild &amp; Cherry Sweet at 60</div>
+    <p>Panel de invitados · Lunes 4 de enero de 2027</p>
+  </header>
+
+  <div class="resumen">
+    <div class="dato"><b id="totInvitados">0</b><span>Invitaciones</span></div>
+    <div class="dato"><b id="totPuestos">0</b><span>Puestos</span></div>
+    <div class="dato ok"><b id="totSi">0</b><span>Confirmados</span></div>
+    <div class="dato no"><b id="totNo">0</b><span>No asisten</span></div>
+    <div class="dato espera"><b id="totEspera">0</b><span>Pendientes</span></div>
+  </div>
+
+  <div class="caja">
+    <h2>Agregar invitado</h2>
+    <form class="fila" id="formNuevo">
+      <div class="nombre-campo">
+        <label for="nNombre">Nombre en la invitación</label>
+        <input id="nNombre" placeholder="Ej. Familia Pérez" required maxlength="80">
+      </div>
+      <div>
+        <label for="nPuestos">Puestos</label>
+        <input id="nPuestos" type="number" min="1" max="20" value="2" required>
+      </div>
+      <div>
+        <label for="nTel">WhatsApp (opcional)</label>
+        <input id="nTel" inputmode="tel" placeholder="6000-0000">
+      </div>
+      <div>
+        <label for="nIdioma">Idioma</label>
+        <select id="nIdioma"><option value="es">Español</option><option value="en">English</option></select>
+      </div>
+      <button class="btn" type="submit">+ Agregar</button>
+    </form>
+  </div>
+
+  <div class="caja">
+    <div class="barra">
+      <h2 style="margin:0">Invitados</h2>
+      <input id="buscar" placeholder="Buscar…" aria-label="Buscar invitado">
+    </div>
+    <div class="lista" id="lista"></div>
+    <p class="ayuda">Cuando un invitado te confirme por WhatsApp, cambia su estado aquí.</p>
+  </div>
+
+  <div class="caja">
+    <h2>Mensaje para enviar</h2>
+    <label for="plantilla">Texto en español (usa {nombre}, {puestos} y {enlace})</label>
+    <textarea id="plantilla"></textarea>
+    <label for="plantillaEn" style="margin-top:12px">Texto en inglés</label>
+    <textarea id="plantillaEn"></textarea>
+    <div class="barra" style="margin:12px 0 0">
+      <button class="btn claro mini" id="restaurar" type="button">Restaurar textos</button>
+    </div>
+  </div>
+
+  <div class="caja">
+    <h2>Respaldo</h2>
+    <div class="barra" style="justify-content:flex-start;margin:0">
+      <button class="btn claro" id="exportar" type="button">Descargar lista (CSV)</button>
+      <button class="btn claro" id="importarBtn" type="button">Cargar lista (CSV)</button>
+      <input type="file" id="importar" accept=".csv,text/csv" hidden>
+    </div>
+    <p class="ayuda">La lista se guarda en este navegador. Para usarla en otro teléfono o computadora, descarga el CSV aquí y cárgalo allá.</p>
+  </div>
+</div>
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+  const BASE = 'https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/';
+  const CLAVE = 'panel-dylka-60';
+  const TEXTO = '¡Hola {nombre}! 🍒\nCon mucho cariño te invito a celebrar mis 60: Wild & Cherry Sweet, el lunes 4 de enero de 2027 en Bahía Bistro, Nueva Gorgona.\nHe reservado {puestos} para ti.\n\nAquí está tu invitación:\n{enlace}';
+  const TEXTO_EN = "Hi {nombre}! 🍒\nI'd love for you to celebrate my 60th with me: Wild & Cherry Sweet, Monday, January 4, 2027 at Bahía Bistro, Nueva Gorgona.\nI've reserved {puestos} for you.\n\nHere's your invitation:\n{enlace}";
+  const ESTADOS = { espera: 'Pendiente', si: 'Confirmado', no: 'No asiste' };
+
+  const leer = () => { try { return JSON.parse(localStorage.getItem(CLAVE)) || {}; } catch { return {}; } };
+  const datos = Object.assign({ invitados: [], plantilla: TEXTO, plantillaEn: TEXTO_EN }, leer());
+  const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch {} };
+
+  const enlace = g => BASE + '?' + new URLSearchParams(Object.assign({ n: g.nombre, p: g.puestos }, g.idioma === 'en' ? { lang: 'en' } : {}));
+  const puestosTxt = (n, en) => en ? (n == 1 ? '1 seat' : n + ' seats') : (n == 1 ? '1 puesto' : n + ' puestos');
+  const mensaje = g => { const en = g.idioma === 'en'; return (en ? datos.plantillaEn : datos.plantilla).replaceAll('{nombre}', g.nombre).replaceAll('{puestos}', puestosTxt(g.puestos, en)).replaceAll('{enlace}', enlace(g)); };
+  const telefono = t => { const d = (t || '').replace(/\D/g, ''); return d.length === 8 ? '507' + d : d; };
+
+  const aviso = t => { const a = document.getElementById('aviso'); a.textContent = t; a.classList.add('ver'); clearTimeout(aviso.t); aviso.t = setTimeout(() => a.classList.remove('ver'), 1800); };
+  const copiar = async (t, ok) => { try { await navigator.clipboard.writeText(t); aviso(ok); } catch { prompt('Copia el texto:', t); } };
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function pintar() {
+    const filtro = document.getElementById('buscar').value.trim().toLowerCase();
+    const lista = document.getElementById('lista');
+    const vis = datos.invitados.map((g, k) => [g, k]).filter(([g]) => g.nombre.toLowerCase().includes(filtro));
+    lista.innerHTML = vis.length ? vis.map(([g, k]) => `
+      <div class="invitado ${esc(g.estado || 'espera')}" data-k="${k}">
+        <input value="${esc(g.nombre)}" data-campo="nombre" aria-label="Nombre">
+        <input type="number" min="1" max="20" value="${+g.puestos || 1}" data-campo="puestos" aria-label="Puestos">
+        <select data-campo="estado" aria-label="Estado">${Object.entries(ESTADOS).map(([v, t]) => `<option value="${v}"${(g.estado || 'espera') === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
+        <div class="acciones">
+          <button class="btn mini wa" data-acc="wa">WhatsApp</button>
+          <button class="btn mini" data-acc="copiar">Copiar enlace</button>
+          <button class="btn mini claro" data-acc="ver">Ver</button>
+          <button class="btn mini peligro" data-acc="borrar">Quitar</button>
+        </div>
+        <div class="enlace">${esc(enlace(g))}${g.tel ? ' · 📱 ' + esc(g.tel) : ''}${g.idioma === 'en' ? ' · English' : ''}</div>
+      </div>`).join('') : `<p class="vacio">${datos.invitados.length ? 'Nadie coincide con la búsqueda.' : 'Aún no hay invitados. Agrega el primero arriba.'}</p>`;
+    const inv = datos.invitados, suma = arr => arr.reduce((s, g) => s + (+g.puestos || 0), 0);
+    document.getElementById('totInvitados').textContent = inv.length;
+    document.getElementById('totPuestos').textContent = suma(inv);
+    document.getElementById('totSi').textContent = suma(inv.filter(g => g.estado === 'si'));
+    document.getElementById('totNo').textContent = suma(inv.filter(g => g.estado === 'no'));
+    document.getElementById('totEspera').textContent = suma(inv.filter(g => !g.estado || g.estado === 'espera'));
+  }
+
+  document.getElementById('formNuevo').addEventListener('submit', e => {
+    e.preventDefault();
+    const nombre = document.getElementById('nNombre').value.trim();
+    const puestos = Math.max(1, Math.min(20, parseInt(document.getElementById('nPuestos').value, 10) || 1));
+    if (!nombre) return;
+    datos.invitados.push({ nombre, puestos, tel: document.getElementById('nTel').value.trim(), idioma: document.getElementById('nIdioma').value, estado: 'espera' });
+    guardar(); pintar();
+    document.getElementById('nNombre').value = ''; document.getElementById('nTel').value = '';
+    document.getElementById('nNombre').focus();
+    aviso('Invitado agregado');
+  });
+
+  document.getElementById('lista').addEventListener('change', e => {
+    const fila = e.target.closest('.invitado'), campo = e.target.dataset.campo;
+    if (!fila || !campo) return;
+    const g = datos.invitados[fila.dataset.k];
+    if (campo === 'puestos') g.puestos = Math.max(1, Math.min(20, parseInt(e.target.value, 10) || 1));
+    else if (campo === 'estado') g.estado = e.target.value in ESTADOS ? e.target.value : 'espera';
+    else g.nombre = e.target.value.trim() || g.nombre;
+    guardar(); pintar(); aviso(campo === 'estado' ? 'Estado: ' + ESTADOS[g.estado] : 'Cambios guardados');
+  });
+
+  document.getElementById('lista').addEventListener('click', e => {
+    const acc = e.target.dataset.acc; if (!acc) return;
+    const k = +e.target.closest('.invitado').dataset.k, g = datos.invitados[k];
+    if (acc === 'copiar') copiar(enlace(g), 'Enlace copiado');
+    if (acc === 'ver') window.open(enlace(g), '_blank');
+    if (acc === 'wa') window.open('https://wa.me/' + telefono(g.tel) + '?text=' + encodeURIComponent(mensaje(g)), '_blank');
+    if (acc === 'borrar' && confirm(`¿Quitar a ${g.nombre} de la lista?`)) { datos.invitados.splice(k, 1); guardar(); pintar(); }
+  });
+
+  document.getElementById('buscar').addEventListener('input', pintar);
+
+  const plantilla = document.getElementById('plantilla'), plantillaEn = document.getElementById('plantillaEn');
+  plantilla.value = datos.plantilla; plantillaEn.value = datos.plantillaEn;
+  plantilla.addEventListener('input', () => { datos.plantilla = plantilla.value; guardar(); });
+  plantillaEn.addEventListener('input', () => { datos.plantillaEn = plantillaEn.value; guardar(); });
+  document.getElementById('restaurar').addEventListener('click', () => { plantilla.value = datos.plantilla = TEXTO; plantillaEn.value = datos.plantillaEn = TEXTO_EN; guardar(); aviso('Textos restaurados'); });
+
+  // Respaldo en CSV: nombre, puestos, whatsapp, idioma, estado
+  const celda = t => { t = String(t ?? ''); if (/^[=+\-@]/.test(t)) t = "'" + t; return /[",\n;]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  document.getElementById('exportar').addEventListener('click', () => {
+    const filas = [['Nombre', 'Puestos', 'WhatsApp', 'Idioma', 'Estado', 'Enlace'], ...datos.invitados.map(g => [g.nombre, g.puestos, g.tel || '', g.idioma || 'es', ESTADOS[g.estado || 'espera'], enlace(g)])];
+    const blob = new Blob(['\ufeff' + filas.map(f => f.map(celda).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'invitados-dylka-60.csv' });
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+  document.getElementById('importarBtn').addEventListener('click', () => document.getElementById('importar').click());
+  document.getElementById('importar').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    const texto = (await f.text()).replace(/^\ufeff/, '');
+    const sep = texto.split('\n')[0].includes(';') ? ';' : ',';
+    const filas = texto.split(/\r?\n/).filter(Boolean).map(l => {
+      const out = []; let cur = '', q = false;
+      for (const c of l) { if (c === '"') q = !q; else if (c === sep && !q) { out.push(cur); cur = ''; } else cur += c; }
+      return out.concat(cur).map(x => x.replace(/""/g, '"').replace(/^'(?=[=+\-@])/, '').trim());
+    });
+    const estadoDe = t => { t = (t || '').toLowerCase(); return t.startsWith('conf') ? 'si' : t.startsWith('no') ? 'no' : 'espera'; };
+    const nuevos = filas.filter(r => r[0] && r[0].toLowerCase() !== 'nombre')
+      .map(r => ({ nombre: r[0].slice(0, 80), puestos: Math.max(1, Math.min(20, parseInt(r[1], 10) || 1)), tel: r[2] || '', idioma: (r[3] || '').toLowerCase().startsWith('en') ? 'en' : 'es', estado: estadoDe(r[4]) }));
+    if (!nuevos.length) return aviso('El archivo no tiene invitados');
+    if (datos.invitados.length && !confirm(`Se agregarán ${nuevos.length} invitados a la lista actual. ¿Continuar?`)) return;
+    datos.invitados.push(...nuevos); guardar(); pintar(); aviso(nuevos.length + ' invitados cargados');
+    e.target.value = '';
+  });
+
+  pintar();
+</script>
+</body>
+</html>
