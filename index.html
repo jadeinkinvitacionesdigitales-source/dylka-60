@@ -43,8 +43,8 @@
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
-  html { background: var(--night); }
-  body { background: var(--night); color: var(--ink); font-family: var(--f-body); overflow-x: hidden; }
+  html { background: var(--night); overflow-x: clip; }
+  body { background: var(--night); color: var(--ink); font-family: var(--f-body); overflow-x: clip; }
   body.locked { overflow: hidden; height: 100%; }
   img { display: block; max-width: 100%; height: auto; }
 
@@ -62,7 +62,7 @@
 
   .col { position: relative; z-index: 2; max-width: 480px; margin: 0 auto;
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 0 96px; display: flex; flex-direction: column; gap: 64px; }
+    padding-block: 0; display: flex; flex-direction: column; gap: 64px; }
   .sticker { position: absolute; pointer-events: none; filter: drop-shadow(0 8px 14px rgba(0,0,0,.45)); }
 
   /* ---------- selector de idioma ---------- */
@@ -118,22 +118,23 @@
   .band::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%;
     background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); animation: glint 3.2s ease-in-out 3.5s infinite; }
   @keyframes glint { 0% { left: -60%; } 35%,100% { left: 130%; } }
-  .age { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; margin: -6px 14px 0 0; position: relative; z-index: 3; }
+  .age { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; margin: -6px 4px 0 0; position: relative; z-index: 3; }
   .age .at { font-family: var(--f-script); font-size: 3.4rem; color: var(--gold); }
   .age .sixty { font-family: var(--f-slam); font-size: clamp(5rem, 26vw, 7rem); line-height: .9; color: var(--gold); transform: rotate(-6deg); display: inline-block; min-width: 1.1em;
     text-shadow: 5px 5px 0 var(--cherry-deep); }
   .opened .age .sixty { animation: glow 1.6s ease-in-out 3s infinite; }
   @keyframes glow { 50% { text-shadow: 5px 5px 0 var(--cherry-deep), 0 0 26px rgba(233,196,106,.9); } }
-  .photo { position: relative; margin: -70px auto 0; width: 92%; max-width: 420px;
+  .stage { position: relative; margin-top: -20px; }
+  .photo { position: relative; margin: 0 auto; width: 92%; max-width: 420px;
     -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 98%); mask-image: linear-gradient(180deg, #000 72%, transparent 98%); }
   .opened .photo { animation: breathe 6s ease-in-out 2.6s infinite; }
   @keyframes breathe { 50% { scale: 1.035; } }
-  .heart { position: absolute; width: 112px; height: 104px; display: grid; place-items: center; z-index: 4; }
+  .heart { position: absolute; width: 100px; height: 93px; display: grid; place-items: center; z-index: 4; }
   .heart svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
-  .heart b { position: relative; font-family: var(--f-slam); font-weight: 400; font-size: 1.2rem; line-height: .95; margin-top: -10px; }
-  .h1 { left: 0; top: 358px; }
-  .h2 { right: 0; top: 428px; }
-  .xo { position: absolute; left: 8px; top: 298px; font-family: var(--f-script); font-size: 2.6rem; color: var(--cherry); transform: rotate(-14deg); z-index: 3; }
+  .heart b { position: relative; font-family: var(--f-slam); font-weight: 400; font-size: 1.08rem; line-height: .95; margin-top: -9px; }
+  .h1 { left: -12px; top: 44%; }
+  .h2 { right: -12px; top: 56%; }
+  .xo { position: absolute; left: 0; top: 36%; font-family: var(--f-script); font-size: 2.6rem; color: var(--cherry); transform: rotate(-14deg); z-index: 3; }
   .hero .s-cherry { width: 104px; right: -16px; top: 6px; transform: rotate(14deg); z-index: 2; }
   .hero .s-star { width: 76px; left: -16px; top: 64px; transform: rotate(-18deg); z-index: 2; }
   .hero .s-spark { width: 40px; right: 6px; top: 230px; }
@@ -225,10 +226,9 @@
   .panel .what { font-weight: 900; font-size: .9rem; letter-spacing: .04em; text-shadow: 0 2px 6px rgba(0,0,0,.6); }
   .panel .icon { position: absolute; top: 16px; left: 50%; translate: -50% 0; width: 70%; animation: sway 3s ease-in-out infinite; }
   @keyframes sway { 0%,100% { rotate: -5deg; } 50% { rotate: 5deg; } }
-  .dress .s-zebra { width: 170px; left: -16px; bottom: -60px; z-index: -1; opacity: .9; }
   .dress .s-star { width: 70px; right: -16px; top: -34px; z-index: 3; }
 
-  .rsvp { text-align: center; padding-bottom: 110px; }
+  .rsvp { text-align: center; padding-bottom: clamp(220px, 58vw, 250px); }
   .rsvp .s-disco { position: relative; width: 170px; margin: 0 auto -10px; }
   .rsvp .s-disco.in { animation: drop .9s both cubic-bezier(.3,1.5,.5,1), swing 2.6s .9s ease-in-out infinite; transform-origin: 50% 0; }
   @keyframes swing { 0%,100% { rotate: -6deg; } 50% { rotate: 6deg; } }
@@ -244,9 +244,11 @@
   .rsvp .btn { justify-content: center; width: 100%; font-size: 1rem; }
   .sign { font-family: var(--f-script); font-size: 3.2rem; margin-top: 26px; line-height: 1.1; display: inline-block; }
   .kiss { width: 110px; margin: 6px auto 0; transform: rotate(-12deg); }
-  .mirror { position: absolute; width: 170px; z-index: -1; opacity: .9; }
-  .mirror.tr { right: -16px; top: -40px; transform: rotate(180deg); width: 140px; }
-  .mirror.bl { left: -16px; bottom: -96px; width: 160px; }
+  /* piezas de esquina: sus bordes rectos tocan el borde de la pantalla y el final de la página */
+  .page-end { position: relative; z-index: 1; height: 0; overflow: visible; }
+  .corner { position: absolute; bottom: 0; pointer-events: none; }
+  .corner.bl { left: 0; width: min(170px, 40vw); }
+  .corner.br { right: 0; width: min(150px, 36vw); }
 
   .music { position: fixed; z-index: 20; right: max(14px, env(safe-area-inset-right, 0px)); bottom: max(14px, env(safe-area-inset-bottom, 0px));
     width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--ink); cursor: pointer;
@@ -304,10 +306,12 @@
     <h2 class="name">DYLKA</h2>
     <div class="band">WILD &amp; CHERRY SWEET</div>
     <div class="age"><span class="at">at</span><span class="sixty" id="sixty">60</span></div>
+    <div class="stage">
     <div class="xo">xoxo</div>
     <div class="heart h1"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartDate">LUNES<br>4 ENE<br>2027</b></div>
     <div class="heart h2"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartAge">MIS<br>60<br>AÑOS</b></div>
     <div class="photo"><img src="img/dylka.webp" alt="Dylka" width="760" height="1107"></div>
+    </div>
     <img class="sticker s-lips" src="img/lips_red.webp" alt="">
     <img class="sticker s-disco" src="img/disco_gold.webp" alt="">
   </section>
@@ -346,7 +350,6 @@
 
   <!-- DRESS CODE -->
   <section class="dress" aria-labelledby="t-dress">
-    <img class="sticker s-zebra" data-rv="left" style="--d:.2s" src="img/zebra.webp" alt="">
     <h2 class="tag" id="t-dress" data-rv="slam">DRESS CODE</h2><br>
     <div class="sub" data-rv="wipe" style="--d:.35s" data-i18n="comeWild">ven salvaje</div>
     <div class="panels">
@@ -360,7 +363,6 @@
 
   <!-- CONFIRMACIÓN -->
   <section class="rsvp" aria-labelledby="t-rsvp">
-    <img class="mirror tr" data-rv="right" src="img/mirror_frame.webp" alt="">
     <img class="sticker s-disco" data-rv="drop" src="img/disco_stars.webp" alt="">
     <h2 class="tag" id="t-rsvp" data-rv="slam" style="--d:.3s" data-i18n="rsvp">CONFIRMA</h2>
     <form id="rsvp" novalidate data-rv="up" style="--d:.2s">
@@ -384,9 +386,12 @@
     <div><div class="sign" data-rv="wipe" data-i18n="love">con amor, Dylka</div></div>
     <img class="kiss" data-rv="stamp" style="--d:.5s" src="img/lips_red.webp" alt="">
     <div class="phrase" data-rv="up" style="--d:.7s">Wild &amp; Cherry Sweet at 60</div>
-    <img class="mirror bl" data-rv="left" style="--d:.3s" src="img/mirror_frame.webp" alt="">
   </section>
 </main>
+<div class="page-end" aria-hidden="true">
+  <img class="corner bl" data-rv="left" style="--d:.2s" src="img/mirror_frame.webp" alt="">
+  <img class="corner br" data-rv="right" style="--d:.35s" src="img/zebra.webp" alt="">
+</div>
 
 <audio id="song" src="audio/fiesta.mp3" preload="auto" loop></audio>
 <button class="music" id="music" type="button" aria-label="Música: activar o pausar" data-i18n-aria="music" aria-pressed="false"></button>
