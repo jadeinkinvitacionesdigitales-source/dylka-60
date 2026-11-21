@@ -18,6 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Invitación de Dylka: Wild &amp; Cherry Sweet at 60">
 <meta property="og:locale" content="es_PA">
+<meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0706">
 <meta name="description" content="Estás invitada/o a celebrar los 60 de Dylka: Wild & Cherry Sweet. Lunes 4 de enero de 2027, Bahía Bistro, Nueva Gorgona.">
@@ -25,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@500;600;800;900&family=Pinyon+Script&display=swap">
 <style>
-  /* Layout: una columna tipo historia vertical (máx. 480px) sobre piel de guepardo; apertura a pantalla completa. */
+  /* Layout: una columna tipo historia vertical (máx. 480px) sobre piel de guepardo; cada sección entra como una escena de video. */
   :root {
     --night: #0b0706;
     --ink: #fff8ee;
@@ -33,108 +34,170 @@
     --cherry: #c8102e;
     --cherry-deep: #6b0a12;
     --gold: #e9c46a;
-    --khaki: #b59c6e;
     --card: rgba(12, 7, 6, .82);
     --f-slam: "Anton", "Impact", "Arial Narrow", sans-serif;
     --f-body: "Montserrat", "Segoe UI", system-ui, sans-serif;
     --f-script: "Pinyon Script", "Kunstler Script", cursive;
+    --spring: cubic-bezier(.3, 1.7, .5, 1);
+    --snap: cubic-bezier(.16, 1, .3, 1);
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html { background: var(--night); }
   body { background: var(--night); color: var(--ink); font-family: var(--f-body); overflow-x: hidden; }
   body.locked { overflow: hidden; height: 100%; }
+  img { display: block; max-width: 100%; height: auto; }
 
-  /* fondo fijo */
-  .bgfur { position: fixed; inset: 0; z-index: 0; background: url("img/bg_leopard.webp") center/cover; }
+  /* ---------- fondo vivo ---------- */
+  .bgfur { position: fixed; inset: -6%; z-index: 0; background: url("img/bg_leopard.webp") center/cover; animation: pan 26s ease-in-out infinite alternate; }
   .bgfur::after { content: ""; position: absolute; inset: 0;
     background: radial-gradient(ellipse 80% 50% at 50% 40%, rgba(150,10,25,.35), transparent 70%),
                 linear-gradient(180deg, rgba(8,4,3,.72), rgba(8,4,3,.62) 50%, rgba(8,4,3,.85)); }
+  @keyframes pan { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.14) translate(-2%, -3%); } }
+  .lights { position: fixed; inset: -50%; z-index: 0; pointer-events: none; opacity: .13; mix-blend-mode: screen;
+    background: conic-gradient(from 0deg, transparent 0 8%, #fff 9% 10%, transparent 11% 24%, var(--gold) 25% 26%, transparent 27% 41%, var(--cherry) 42% 44%, transparent 45% 58%, #fff 59% 60%, transparent 61% 76%, var(--gold) 77% 78%, transparent 79%);
+    animation: sweep 18s linear infinite; }
+  @keyframes sweep { to { rotate: 360deg; } }
+  #fx { position: fixed; inset: 0; z-index: 1; pointer-events: none; width: 100%; height: 100%; }
 
-  .col { position: relative; z-index: 1; max-width: 480px; margin: 0 auto;
+  .col { position: relative; z-index: 2; max-width: 480px; margin: 0 auto;
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 0 96px; display: flex; flex-direction: column; gap: 56px; }
-
-  img { display: block; max-width: 100%; height: auto; }
+    padding-block: 0 96px; display: flex; flex-direction: column; gap: 64px; }
   .sticker { position: absolute; pointer-events: none; filter: drop-shadow(0 8px 14px rgba(0,0,0,.45)); }
+
+  /* ---------- selector de idioma ---------- */
+  .lang { display: inline-flex; padding: 4px; gap: 4px; border-radius: 999px; background: rgba(255,248,238,.1); border: 2px solid var(--gold); }
+  .lang button { border: 0; cursor: pointer; border-radius: 999px; padding: 9px 16px; font: 800 .8rem var(--f-body); letter-spacing: .08em;
+    color: var(--ink); background: transparent; display: inline-flex; align-items: center; gap: 6px; }
+  .lang button[aria-pressed="true"] { background: var(--cherry); box-shadow: 0 0 0 2px var(--ink) inset; }
+  .lang button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .lang-pick { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .lang-pick small { font-weight: 700; letter-spacing: .22em; font-size: .64rem; color: var(--cream); opacity: .85; }
+  .lang.mini { position: fixed; z-index: 25; top: max(12px, env(safe-area-inset-top, 0px)); left: max(12px, env(safe-area-inset-left, 0px)); padding: 3px; border-width: 1.5px; background: rgba(11,7,6,.72); backdrop-filter: blur(6px); }
+  .lang.mini button { padding: 6px 10px; font-size: .68rem; }
 
   /* ---------- PORTADA ---------- */
   .cover { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; text-align: center;
     background: var(--night); overflow: hidden;
     padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
-    transition: opacity .7s ease, transform .9s cubic-bezier(.7,0,.3,1); }
-  .cover::before { content: ""; position: absolute; inset: -20px; background: url("img/bg_leopard.webp") center/cover; filter: blur(6px) brightness(.35); }
-  .cover.gone { opacity: 0; transform: scale(1.15); pointer-events: none; }
+    transition: opacity .6s ease .35s, transform .9s cubic-bezier(.7,0,.3,1) .35s; }
+  .cover::before { content: ""; position: absolute; inset: -20px; background: url("img/bg_leopard.webp") center/cover; filter: blur(6px) brightness(.35); animation: pan 14s ease-in-out infinite alternate; }
+  .cover.gone { opacity: 0; transform: scale(1.25); pointer-events: none; }
   .cover-in { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 380px; }
-  .cover .kick { font-weight: 800; letter-spacing: .3em; font-size: .78rem; color: var(--cream); }
+  .cover .kick { font-weight: 800; letter-spacing: .3em; font-size: .78rem; color: var(--cream); animation: blink 2.4s ease-in-out infinite; }
   .cover h1 { margin: 0; font-family: var(--f-slam); font-weight: 400; font-size: clamp(3.6rem, 22vw, 6rem); line-height: .9; font-style: italic;
-    text-shadow: 5px 5px 0 var(--cherry); }
-  .cover .when { font-family: var(--f-script); font-size: 2.3rem; color: var(--gold); line-height: 1; }
-  .seal { margin-top: 10px; position: relative; width: 190px; height: 190px; border-radius: 50%; border: 0; cursor: pointer;
+    text-shadow: 5px 5px 0 var(--cherry); animation: wobble 3.2s ease-in-out infinite; }
+  .cover .when { font-family: var(--f-script); font-size: clamp(1.6rem, 8vw, 2.3rem); white-space: nowrap; color: var(--gold); line-height: 1; }
+  .seal { margin-top: 6px; position: relative; width: 186px; height: 186px; border-radius: 50%; border: 0; cursor: pointer;
     background: radial-gradient(circle at 35% 30%, #e23347, var(--cherry) 45%, var(--cherry-deep)); color: var(--ink);
     box-shadow: 0 0 0 6px rgba(233,196,106,.85), 0 18px 40px rgba(0,0,0,.6);
     display: grid; place-items: center; animation: beat 1.4s ease-in-out infinite; }
-  .seal img { width: 120px; position: absolute; top: 34px; left: 35px; opacity: .95; }
-  .seal span { position: absolute; bottom: 34px; left: 0; right: 0; font-weight: 900; letter-spacing: .14em; font-size: .78rem; }
-  .seal:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; }
+  .seal::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 3px solid var(--gold); animation: ring 1.4s ease-out infinite; }
+  .seal img { width: 120px; position: absolute; top: 34px; left: 33px; opacity: .95; }
+  .seal span { position: absolute; bottom: 32px; left: 0; right: 0; font-weight: 900; letter-spacing: .14em; font-size: .78rem; }
+  .seal:focus-visible { outline: 3px solid var(--gold); outline-offset: 10px; }
+  .cover.kissing .seal { animation: none; }
+  .cover.kissing .seal img { animation: kissZoom .7s cubic-bezier(.6,0,.4,1) forwards; }
   .cover .hint { font-size: .8rem; color: var(--cream); opacity: .8; }
   @keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.07); } 30% { transform: scale(.98); } 45% { transform: scale(1.04); } }
+  @keyframes ring { from { opacity: .9; scale: 1; } to { opacity: 0; scale: 1.45; } }
+  @keyframes kissZoom { 40% { transform: scale(1.4) rotate(-8deg); } to { transform: scale(9) rotate(-14deg); opacity: 0; } }
+  @keyframes blink { 50% { opacity: .45; } }
+  @keyframes wobble { 0%,100% { rotate: -2deg; } 50% { rotate: 2deg; } }
+  .flash { position: fixed; inset: 0; z-index: 40; background: #fff; opacity: 0; pointer-events: none; }
+  .flash.go { animation: flash .7s ease-out .3s; }
+  @keyframes flash { 0% { opacity: 0; } 15% { opacity: .9; } 100% { opacity: 0; } }
 
   /* ---------- HERO ---------- */
-  .hero { position: relative; padding-top: 28px; min-height: 0; text-align: center; }
+  .hero { position: relative; padding-top: 56px; text-align: center; }
   .hero .kick { font-weight: 800; letter-spacing: .32em; font-size: .78rem; color: var(--cream); }
   .name { margin: 4px 0 0; font-family: var(--f-slam); font-weight: 400; font-style: italic; font-size: clamp(5rem, 30vw, 8.4rem); line-height: .95;
     text-shadow: 6px 6px 0 var(--cherry), 0 0 30px rgba(0,0,0,.5); }
-  .band { display: inline-block; margin-top: 6px; background: var(--cherry); border: 4px solid var(--ink); box-shadow: 6px 6px 0 #000;
+  .band { position: relative; overflow: hidden; display: inline-block; margin-top: 6px; background: var(--cherry); border: 4px solid var(--ink); box-shadow: 6px 6px 0 #000;
     padding: 6px 18px 4px; font-family: var(--f-slam); font-size: clamp(1.6rem, 8.5vw, 2.5rem); letter-spacing: .03em; transform: skewX(-8deg); }
+  .band::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); animation: glint 3.2s ease-in-out 3.5s infinite; }
+  @keyframes glint { 0% { left: -60%; } 35%,100% { left: 130%; } }
   .age { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; margin: -6px 14px 0 0; position: relative; z-index: 3; }
   .age .at { font-family: var(--f-script); font-size: 3.4rem; color: var(--gold); }
-  .age .sixty { font-family: var(--f-slam); font-size: clamp(5rem, 26vw, 7rem); line-height: .9; color: var(--gold); text-shadow: 5px 5px 0 var(--cherry-deep); transform: rotate(-6deg); display: inline-block; min-width: 1.1em; }
+  .age .sixty { font-family: var(--f-slam); font-size: clamp(5rem, 26vw, 7rem); line-height: .9; color: var(--gold); transform: rotate(-6deg); display: inline-block; min-width: 1.1em;
+    text-shadow: 5px 5px 0 var(--cherry-deep); }
+  .opened .age .sixty { animation: glow 1.6s ease-in-out 3s infinite; }
+  @keyframes glow { 50% { text-shadow: 5px 5px 0 var(--cherry-deep), 0 0 26px rgba(233,196,106,.9); } }
   .photo { position: relative; margin: -70px auto 0; width: 92%; max-width: 420px;
     -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 98%); mask-image: linear-gradient(180deg, #000 72%, transparent 98%); }
+  .opened .photo { animation: breathe 6s ease-in-out 2.6s infinite; }
+  @keyframes breathe { 50% { scale: 1.035; } }
   .heart { position: absolute; width: 112px; height: 104px; display: grid; place-items: center; z-index: 4; }
   .heart svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
-  .heart b { position: relative; font-family: var(--f-slam); font-weight: 400; font-size: 1.25rem; line-height: .95; margin-top: -10px; }
-  .h1 { left: 0; top: 330px; }
-  .h2 { right: 0; top: 400px; }
-  .xo { position: absolute; left: 8px; top: 270px; font-family: var(--f-script); font-size: 2.6rem; color: var(--cherry); transform: rotate(-14deg); z-index: 3; }
-  .hero .s-cherry { width: 104px; right: -16px; top: -6px; transform: rotate(14deg); z-index: 2; }
-  .hero .s-star { width: 76px; left: -16px; top: -4px; transform: rotate(-18deg); z-index: 2; }
-  .hero .s-spark { width: 40px; right: 6px; top: 200px; }
+  .heart b { position: relative; font-family: var(--f-slam); font-weight: 400; font-size: 1.2rem; line-height: .95; margin-top: -10px; }
+  .h1 { left: 0; top: 358px; }
+  .h2 { right: 0; top: 428px; }
+  .xo { position: absolute; left: 8px; top: 298px; font-family: var(--f-script); font-size: 2.6rem; color: var(--cherry); transform: rotate(-14deg); z-index: 3; }
+  .hero .s-cherry { width: 104px; right: -16px; top: 6px; transform: rotate(14deg); z-index: 2; }
+  .hero .s-star { width: 76px; left: -16px; top: 64px; transform: rotate(-18deg); z-index: 2; }
+  .hero .s-spark { width: 40px; right: 6px; top: 230px; }
   .hero .s-lips { width: 150px; left: -16px; bottom: 0; transform: rotate(-10deg); z-index: 4; }
   .hero .s-disco { width: 150px; right: -40px; bottom: -10px; z-index: 4; }
   .phrase { font-family: var(--f-script); font-size: clamp(1.5rem, 7.5vw, 2.2rem); color: var(--gold); margin-top: 4px; white-space: nowrap; }
 
-  /* animación de apertura (solo después de abrir) */
-  .opened .hero .kick { animation: stretch .6s .2s both cubic-bezier(.2,.8,.2,1); }
-  .opened .name { animation: slam .5s .45s both cubic-bezier(.3,1.6,.5,1), shake .3s .95s; }
-  .opened .band { animation: slide .55s .85s both cubic-bezier(.16,1,.3,1); }
-  .opened .age { animation: pop .6s 1.25s both cubic-bezier(.3,1.8,.5,1); }
-  .opened .photo img { animation: unblur 2.4s 0s both ease-out; }
-  .opened .hero .sticker, .opened .heart, .opened .xo { animation: popin .55s both cubic-bezier(.3,1.9,.5,1); }
-  .opened .hero .s-cherry { animation-delay: 1.9s; } .opened .hero .s-star { animation-delay: 2.05s; }
-  .opened .hero .s-spark { animation-delay: 2.2s; } .opened .hero .s-lips { animation-delay: 2.3s; }
-  .opened .hero .s-disco { animation-delay: 2.45s; } .opened .h1 { animation-delay: 2.7s; }
-  .opened .h2 { animation-delay: 2.9s; } .opened .xo { animation-delay: 3s; }
+  /* apertura tipo video (solo después de abrir) */
+  .opened .hero { animation: cam .45s 1s; }
+  .opened .hero .kick { animation: stretch .6s .5s both var(--snap); }
+  .opened .name { animation: slam .5s .75s both var(--spring); }
+  .opened .band { animation: slide .55s 1.15s both var(--snap); }
+  .opened .age { animation: pop .6s 1.5s both var(--spring); }
+  .opened .photo img { animation: unblur 2.4s .3s both ease-out; }
+  .opened .hero .sticker, .opened .heart, .opened .xo { animation: popin .6s both var(--spring), bob 3s ease-in-out infinite; }
+  .opened .hero .s-cherry { animation-delay: 2.1s, 2.8s; } .opened .hero .s-star { animation-delay: 2.25s, 3s; }
+  .opened .hero .s-lips { animation-delay: 2.5s, 3.2s; } .opened .xo { animation-delay: 3.2s, 3.9s; }
+  .opened .hero .s-spark { animation: popin .6s 2.4s both var(--spring), twinkle 1.8s 3s ease-in-out infinite; }
+  .opened .hero .s-disco { animation: popin .6s 2.65s both var(--spring), spin 7s 3.3s linear infinite; }
+  .opened .h1 { animation: popin .6s 2.9s both var(--spring), heartbeat 1.2s 3.6s ease-in-out infinite; }
+  .opened .h2 { animation: popin .6s 3.1s both var(--spring), heartbeat 1.2s 3.9s ease-in-out infinite; }
+  @keyframes cam { 20% { translate: -6px 4px; } 40% { translate: 6px -3px; } 60% { translate: -4px 2px; } 80% { translate: 3px 0; } }
   @keyframes stretch { from { opacity: 0; letter-spacing: .9em; } to { opacity: 1; letter-spacing: .32em; } }
-  @keyframes slam { from { opacity: 0; transform: scale(2.6) translateY(-20px); } to { opacity: 1; transform: none; } }
-  @keyframes shake { 0%,100% { translate: 0; } 25% { translate: 8px; } 50% { translate: -8px; } 75% { translate: 5px; } }
+  @keyframes slam { from { opacity: 0; transform: scale(2.8) translateY(-20px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
   @keyframes slide { from { opacity: 0; transform: translateX(-120vw) skewX(-8deg); } to { opacity: 1; transform: skewX(-8deg); } }
   @keyframes pop { from { opacity: 0; transform: scale(.2) rotate(-25deg); } to { opacity: 1; transform: none; } }
   @keyframes unblur { from { opacity: 0; filter: blur(26px) brightness(.5); transform: scale(1.18) translateY(30px); } to { opacity: 1; filter: none; transform: none; } }
   @keyframes popin { from { opacity: 0; scale: 0; } to { opacity: 1; scale: 1; } }
-  .float { animation: bob 3s ease-in-out infinite; }
   @keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+  @keyframes twinkle { 0%,100% { scale: 1; rotate: 0deg; opacity: 1; } 50% { scale: .6; rotate: 90deg; opacity: .6; } }
+  @keyframes spin { to { rotate: 360deg; } }
+  @keyframes heartbeat { 0%,100% { scale: 1; } 14% { scale: 1.12; } 28% { scale: .98; } 42% { scale: 1.07; } }
+
+  /* ---------- escenas al hacer scroll ---------- */
+  .js [data-rv] { opacity: 0; }
+  .js [data-rv].in { opacity: 1; }
+  [data-rv="slam"].in  { animation: slamTag .55s var(--d, 0s) both var(--spring); }
+  [data-rv="left"].in  { animation: fromLeft .6s var(--d, 0s) both var(--snap); }
+  [data-rv="right"].in { animation: fromRight .6s var(--d, 0s) both var(--snap); }
+  [data-rv="up"].in    { animation: fromUp .7s var(--d, 0s) both var(--spring); }
+  [data-rv="drop"].in  { animation: drop .6s var(--d, 0s) both var(--spring); }
+  [data-rv="wipe"].in  { animation: wipe .9s var(--d, 0s) both ease-out; }
+  [data-rv="pop"].in   { animation: popSpin .65s var(--d, 0s) both var(--spring), bob 3s calc(var(--d, 0s) + .8s) ease-in-out infinite; }
+  [data-rv="stamp"].in { animation: stamp .45s var(--d, 0s) both cubic-bezier(.6,0,.4,1); }
+  @keyframes slamTag { from { opacity: 0; scale: 2.4; filter: blur(4px); } to { opacity: 1; scale: 1; filter: none; } }
+  @keyframes fromLeft { from { opacity: 0; translate: -110vw 0; } to { opacity: 1; translate: 0 0; } }
+  @keyframes fromRight { from { opacity: 0; translate: 110vw 0; } to { opacity: 1; translate: 0 0; } }
+  @keyframes fromUp { from { opacity: 0; translate: 0 120px; scale: .8; } to { opacity: 1; translate: 0 0; scale: 1; } }
+  @keyframes drop { from { opacity: 0; translate: 0 -80px; } to { opacity: 1; translate: 0 0; } }
+  @keyframes wipe { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+  @keyframes popSpin { from { opacity: 0; scale: 0; rotate: -120deg; } to { opacity: 1; scale: 1; rotate: 0deg; } }
+  @keyframes stamp { from { opacity: 0; scale: 3; } 70% { opacity: 1; scale: .9; } to { opacity: 1; scale: 1; } }
 
   /* ---------- SECCIONES ---------- */
   section { position: relative; }
   .tag { margin: 0; display: inline-block; font-family: var(--f-slam); font-size: clamp(2.6rem, 14vw, 3.6rem); line-height: 1; letter-spacing: .01em;
     background: var(--ink); color: var(--night); padding: 6px 18px 2px; box-shadow: 7px 7px 0 var(--cherry); transform: rotate(-3deg); }
-  .sub { font-family: var(--f-script); font-size: 2.2rem; color: var(--gold); margin: 8px 0 0 18px; }
+  .sub { font-family: var(--f-script); font-size: 2.2rem; color: var(--gold); margin: 8px 0 0 18px; display: inline-block; }
 
   .count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 18px; }
-  .count div { background: var(--card); border: 2px solid var(--gold); border-radius: 18px; padding: 12px 4px 10px; text-align: center; }
+  .count > div { background: var(--card); border: 2px solid var(--gold); border-radius: 18px; padding: 12px 4px 10px; text-align: center; overflow: hidden; }
   .count b { display: block; font-family: var(--f-slam); font-weight: 400; font-size: clamp(2rem, 11vw, 2.8rem); line-height: 1; font-variant-numeric: tabular-nums; }
+  .count b.flip { animation: flip .45s var(--snap); }
+  @keyframes flip { from { translate: 0 -60%; opacity: 0; color: var(--gold); } to { translate: 0 0; opacity: 1; } }
   .count small { font-weight: 800; letter-spacing: .14em; font-size: .62rem; color: var(--cream); }
   .count-note { margin-top: 10px; font-size: .8rem; color: var(--cream); opacity: .8; text-align: center; }
 
@@ -144,186 +207,244 @@
   .big { font-weight: 900; font-size: 1.2rem; letter-spacing: .02em; line-height: 1.2; }
   .small { font-weight: 500; font-size: .95rem; color: var(--cream); margin-top: 4px; line-height: 1.4; }
   .btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 12px 20px; border-radius: 999px; border: 3px solid var(--ink);
-    background: var(--gold); color: var(--night); font-weight: 900; font-size: .9rem; letter-spacing: .06em; text-decoration: none; cursor: pointer; font-family: var(--f-body); }
-  .btn:hover { transform: translateY(-2px); } .btn:focus-visible { outline: 3px solid var(--cherry); outline-offset: 3px; }
-  .btn.red { background: var(--cherry); color: var(--ink); }
+    background: var(--gold); color: var(--night); font-weight: 900; font-size: .9rem; letter-spacing: .06em; text-decoration: none; cursor: pointer; font-family: var(--f-body);
+    transition: transform .2s var(--spring); }
+  .btn:hover { transform: translateY(-3px) scale(1.03); } .btn:focus-visible { outline: 3px solid var(--cherry); outline-offset: 3px; }
+  .btn.red { background: var(--cherry); color: var(--ink); animation: nudge 2.6s ease-in-out infinite; }
+  @keyframes nudge { 0%,80%,100% { scale: 1; } 86% { scale: 1.05; } 92% { scale: .98; } }
   .fiesta .s-martini { width: 92px; right: -16px; top: -40px; transform: rotate(12deg); }
   .fiesta .cards { position: relative; }
   .fiesta .s-cheetah { width: 96px; right: -16px; bottom: -44px; transform: rotate(-10deg); }
 
-  .dress .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
+  .dress .panels { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
   .panel { position: relative; aspect-ratio: 3 / 4.2; max-width: 100%; border: 4px solid var(--ink); border-radius: 26px; overflow: hidden;
     display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; padding: 14px 8px; }
   .panel.ellas { background: linear-gradient(180deg, transparent 35%, rgba(0,0,0,.8)), url("img/bg_leopard.webp") center/cover; transform: rotate(-3deg); }
   .panel.ellos { background: linear-gradient(180deg, #d8c39a, #8d7650); transform: rotate(3deg); }
   .panel .who { font-family: var(--f-slam); font-size: clamp(2.2rem, 11vw, 3rem); line-height: 1; text-shadow: 3px 3px 0 #000; }
   .panel .what { font-weight: 900; font-size: .9rem; letter-spacing: .04em; text-shadow: 0 2px 6px rgba(0,0,0,.6); }
-  .panel .icon { position: absolute; top: 16px; left: 50%; translate: -50% 0; width: 70%; }
-  .dress .panels { position: relative; }
+  .panel .icon { position: absolute; top: 16px; left: 50%; translate: -50% 0; width: 70%; animation: sway 3s ease-in-out infinite; }
+  @keyframes sway { 0%,100% { rotate: -5deg; } 50% { rotate: 5deg; } }
   .dress .s-zebra { width: 170px; left: -16px; bottom: -60px; z-index: -1; opacity: .9; }
   .dress .s-star { width: 70px; right: -16px; top: -34px; z-index: 3; }
 
-  .playlist { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
-  .song { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; background: var(--card); border-radius: 16px; padding: 10px 14px; border: 1px solid rgba(233,196,106,.4); }
-  .song i { width: 38px; height: 38px; border-radius: 50%; background: radial-gradient(circle, var(--cherry) 0 22%, #111 23% 60%, #2a2a2a 61% 64%, #111 65%); }
-  .song b { display: block; font-weight: 800; font-size: .95rem; } .song span { font-size: .8rem; color: var(--cream); }
-
   .rsvp { text-align: center; padding-bottom: 110px; }
   .rsvp .s-disco { position: relative; width: 170px; margin: 0 auto -10px; }
+  .rsvp .s-disco.in { animation: drop .9s both cubic-bezier(.3,1.5,.5,1), swing 2.6s .9s ease-in-out infinite; transform-origin: 50% 0; }
+  @keyframes swing { 0%,100% { rotate: -6deg; } 50% { rotate: 6deg; } }
   .rsvp form { margin-top: 20px; text-align: left; background: var(--card); border: 2px solid var(--gold); border-radius: 26px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
   label { font-weight: 800; font-size: .8rem; letter-spacing: .1em; color: var(--cream); display: flex; flex-direction: column; gap: 6px; }
   input, select, textarea { font: 600 1rem var(--f-body); color: var(--ink); background: rgba(255,248,238,.08); border: 2px solid rgba(233,196,106,.55); border-radius: 14px; padding: 12px 14px; width: 100%; }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); background: rgba(255,248,238,.14); }
   .choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .choice label { cursor: pointer; text-align: center; padding: 12px 6px; border-radius: 14px; border: 2px solid rgba(233,196,106,.55); font-size: .85rem; letter-spacing: .04em; color: var(--ink); }
-  .choice input:checked + label { background: var(--cherry); border-color: var(--ink); }
+  .choice label { cursor: pointer; text-align: center; padding: 12px 6px; border-radius: 14px; border: 2px solid rgba(233,196,106,.55); font-size: .85rem; letter-spacing: .04em; color: var(--ink); transition: background .2s, scale .2s var(--spring); }
+  .choice input:checked + label { background: var(--cherry); border-color: var(--ink); scale: 1.04; }
   .choice input:focus-visible + label { outline: 3px solid var(--gold); outline-offset: 2px; }
   .rsvp .btn { justify-content: center; width: 100%; font-size: 1rem; }
-  .contact { margin-top: 16px; font-size: .9rem; color: var(--cream); line-height: 1.7; }
-  .contact strong { color: var(--ink); user-select: all; }
-  .copy { background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 999px; padding: 2px 10px; font: 700 .72rem var(--f-body); cursor: pointer; margin-left: 6px; }
-  .sign { font-family: var(--f-script); font-size: 3.2rem; margin-top: 26px; line-height: 1.1; }
+  .sign { font-family: var(--f-script); font-size: 3.2rem; margin-top: 26px; line-height: 1.1; display: inline-block; }
   .kiss { width: 110px; margin: 6px auto 0; transform: rotate(-12deg); }
   .mirror { position: absolute; width: 170px; z-index: -1; opacity: .9; }
-  .mirror.tr { right: -16px; top: -40px; transform: rotate(180deg); width: 140px; } .mirror.bl { left: -16px; bottom: -96px; width: 160px; } 
+  .mirror.tr { right: -16px; top: -40px; transform: rotate(180deg); width: 140px; }
+  .mirror.bl { left: -16px; bottom: -96px; width: 160px; }
 
   .music { position: fixed; z-index: 20; right: max(14px, env(safe-area-inset-right, 0px)); bottom: max(14px, env(safe-area-inset-bottom, 0px));
     width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--ink); cursor: pointer;
     background: radial-gradient(circle, var(--cherry) 0 20%, #111 21% 62%, #333 63% 66%, #111 67%); box-shadow: 0 8px 20px rgba(0,0,0,.6); }
   .music.on { animation: spin 2.4s linear infinite; }
   .music:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
-  @keyframes spin { to { rotate: 360deg; } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js [data-rv] { opacity: 1; }
+    #fx, .lights { display: none; }
   }
 </style>
 
 </head>
 <body>
 <div class="bgfur" aria-hidden="true"></div>
+<div class="lights" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="flash" id="flash" aria-hidden="true"></div>
 
-<!-- Portada: lo primero que ve la persona invitada -->
-<div class="cover" id="cover" role="dialog" aria-label="Abrir invitación">
+<!-- Portada: idioma + sello para abrir -->
+<div class="cover" id="cover" role="dialog" aria-label="Abrir invitación" data-i18n-aria="openInvite">
   <div class="cover-in">
-    <div class="kick">TIENES UNA INVITACIÓN</div>
+    <div class="lang-pick">
+      <small>IDIOMA · LANGUAGE</small>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="es" aria-pressed="true">ESPAÑOL</button>
+        <button type="button" data-lang="en" aria-pressed="false">ENGLISH</button>
+      </div>
+    </div>
+    <div class="kick" data-i18n="invited">TIENES UNA INVITACIÓN</div>
     <h1>DYLKA</h1>
     <div class="when">Wild &amp; Cherry Sweet at 60</div>
-    <button class="seal" id="open" type="button" aria-label="Abrir la invitación">
+    <button class="seal" id="open" type="button" aria-label="Abrir la invitación" data-i18n-aria="openInvite">
       <img src="img/lips_red.webp" alt="">
-      <span>ÁBREME</span>
+      <span data-i18n="openMe">ÁBREME</span>
     </button>
-    <div class="hint">Toca el beso · con música 🎶</div>
+    <div class="hint" data-i18n="hint">Toca el beso · con música 🎶</div>
   </div>
+</div>
+
+<div class="lang mini" id="langMini" role="group" aria-label="Idioma / Language" hidden>
+  <button type="button" data-lang="es" aria-pressed="true">ES</button>
+  <button type="button" data-lang="en" aria-pressed="false">EN</button>
 </div>
 
 <main class="col" id="page">
   <!-- HERO -->
   <section class="hero" aria-label="Invitación">
-    <img class="sticker s-star float" src="img/star_leopard.webp" alt="">
-    <img class="sticker s-cherry float" src="img/cherries_bow.webp" alt="">
+    <img class="sticker s-star" src="img/star_leopard.webp" alt="">
+    <img class="sticker s-cherry" src="img/cherries_bow.webp" alt="">
     <img class="sticker s-spark" src="img/sparkle_red.webp" alt="">
-    <div class="kick">¡NOCHE SALVAJE!</div>
+    <div class="kick" data-i18n="wild">¡NOCHE SALVAJE!</div>
     <h2 class="name">DYLKA</h2>
     <div class="band">WILD &amp; CHERRY SWEET</div>
     <div class="age"><span class="at">at</span><span class="sixty" id="sixty">60</span></div>
     <div class="xo">xoxo</div>
-    <div class="heart h1"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b>LUNES<br>4 ENE<br>2027</b></div>
-    <div class="heart h2"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b>MIS<br>60<br>AÑOS</b></div>
-    <div class="photo"><img src="img/dylka.webp" alt="Dylka sonriendo" width="760" height="1107"></div>
-    <img class="sticker s-lips float" src="img/lips_red.webp" alt="">
-    <img class="sticker s-disco float" src="img/disco_gold.webp" alt="">
+    <div class="heart h1"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartDate">LUNES<br>4 ENE<br>2027</b></div>
+    <div class="heart h2"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartAge">MIS<br>60<br>AÑOS</b></div>
+    <div class="photo"><img src="img/dylka.webp" alt="Dylka" width="760" height="1107"></div>
+    <img class="sticker s-lips" src="img/lips_red.webp" alt="">
+    <img class="sticker s-disco" src="img/disco_gold.webp" alt="">
   </section>
 
   <!-- CUENTA REGRESIVA -->
   <section aria-labelledby="t-count">
-    <h2 class="tag" id="t-count">FALTAN</h2>
-    <div class="count" id="count" aria-live="polite">
-      <div><b id="cd-d">--</b><small>DÍAS</small></div>
-      <div><b id="cd-h">--</b><small>HORAS</small></div>
-      <div><b id="cd-m">--</b><small>MIN</small></div>
-      <div><b id="cd-s">--</b><small>SEG</small></div>
+    <h2 class="tag" id="t-count" data-rv="slam" data-i18n="countdown">FALTAN</h2>
+    <div class="count" id="count">
+      <div data-rv="drop" style="--d:.15s"><b id="cd-d">--</b><small data-i18n="days">DÍAS</small></div>
+      <div data-rv="drop" style="--d:.25s"><b id="cd-h">--</b><small data-i18n="hours">HORAS</small></div>
+      <div data-rv="drop" style="--d:.35s"><b id="cd-m">--</b><small data-i18n="mins">MIN</small></div>
+      <div data-rv="drop" style="--d:.45s"><b id="cd-s">--</b><small data-i18n="secs">SEG</small></div>
     </div>
-    <div class="count-note" id="count-note">para la noche más salvaje del año</div>
+    <div class="count-note" id="count-note" data-rv="wipe" style="--d:.6s" data-i18n="countNote">para la noche más salvaje del año</div>
   </section>
 
   <!-- LA FIESTA -->
   <section class="fiesta" aria-labelledby="t-fiesta">
-    <img class="sticker s-martini float" src="img/martini.webp" alt="">
-    <h2 class="tag" id="t-fiesta">LA FIESTA</h2>
-    <div class="sub">te espero</div>
+    <img class="sticker s-martini" data-rv="pop" style="--d:.3s" src="img/martini.webp" alt="">
+    <h2 class="tag" id="t-fiesta" data-rv="slam" data-i18n="party">LA FIESTA</h2><br>
+    <div class="sub" data-rv="wipe" style="--d:.35s" data-i18n="seeYou">te espero</div>
     <div class="cards">
-      <div class="card">
-        <div class="lab">CUÁNDO</div>
-        <div class="big">LUNES 4 DE ENERO · 2027</div>
+      <div class="card" data-rv="left" style="--d:.1s">
+        <div class="lab" data-i18n="when">CUÁNDO</div>
+        <div class="big" data-i18n="date">LUNES 4 DE ENERO · 2027</div>
       </div>
-      <div class="card">
-        <div class="lab">DÓNDE</div>
+      <div class="card" data-rv="right" style="--d:.25s">
+        <div class="lab" data-i18n="where">DÓNDE</div>
         <div class="big">BAHÍA BISTRO</div>
         <div class="small">PH Bahía · Nueva Gorgona</div>
-        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Bahia%20Bistro%20PH%20Bahia%20Nueva%20Gorgona%20Panama" target="_blank" rel="noopener">📍 CÓMO LLEGAR</a>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Bahia%20Bistro%20PH%20Bahia%20Nueva%20Gorgona%20Panama" target="_blank" rel="noopener" data-i18n="directions">📍 CÓMO LLEGAR</a>
       </div>
-      <img class="sticker s-cheetah float" src="img/cheetah_beads.webp" alt="">
+      <img class="sticker s-cheetah" data-rv="pop" style="--d:.6s" src="img/cheetah_beads.webp" alt="">
     </div>
   </section>
 
   <!-- DRESS CODE -->
   <section class="dress" aria-labelledby="t-dress">
-    <img class="sticker s-zebra" src="img/zebra.webp" alt="">
-    <h2 class="tag" id="t-dress">DRESS CODE</h2>
-    <div class="sub">ven salvaje</div>
+    <img class="sticker s-zebra" data-rv="left" style="--d:.2s" src="img/zebra.webp" alt="">
+    <h2 class="tag" id="t-dress" data-rv="slam">DRESS CODE</h2><br>
+    <div class="sub" data-rv="wipe" style="--d:.35s" data-i18n="comeWild">ven salvaje</div>
     <div class="panels">
-      <img class="sticker s-star float" src="img/star_leopard.webp" alt="">
-      <div class="panel ellas"><img class="icon" src="img/lips_leopard.webp" alt=""><div class="who">ELLAS</div><div class="what">ANIMAL PRINT</div></div>
-      <div class="panel ellos">
+      <img class="sticker s-star" data-rv="pop" style="--d:.7s" src="img/star_leopard.webp" alt="">
+      <div class="panel ellas" data-rv="up" style="--d:.15s"><img class="icon" src="img/lips_leopard.webp" alt=""><div class="who" data-i18n="ladies">ELLAS</div><div class="what">ANIMAL PRINT</div></div>
+      <div class="panel ellos" data-rv="up" style="--d:.35s">
         <svg class="icon" viewBox="0 0 310 200" aria-hidden="true"><ellipse cx="155" cy="150" rx="150" ry="40" fill="#5c4a2e"/><path d="M70 150C70 60 100 30 155 30s85 30 85 120Z" fill="#efe0bb" stroke="#5c4a2e" stroke-width="6"/><rect x="72" y="112" width="166" height="26" fill="#0b0706"/></svg>
-        <div class="who">ELLOS</div><div class="what">ESTILO SAFARI</div></div>
+        <div class="who" data-i18n="gents">ELLOS</div><div class="what" data-i18n="safari">ESTILO SAFARI</div></div>
     </div>
   </section>
 
   <!-- CONFIRMACIÓN -->
   <section class="rsvp" aria-labelledby="t-rsvp">
-    <img class="mirror tr" src="img/mirror_frame.webp" alt="">
-    <img class="sticker s-disco" src="img/disco_stars.webp" alt="">
-    <h2 class="tag" id="t-rsvp">CONFIRMA</h2>
-    <form id="rsvp" novalidate>
-      <label for="f-name">TU NOMBRE
-        <input id="f-name" name="name" autocomplete="name" placeholder="Ej. María Pérez" required>
+    <img class="mirror tr" data-rv="right" src="img/mirror_frame.webp" alt="">
+    <img class="sticker s-disco" data-rv="drop" src="img/disco_stars.webp" alt="">
+    <h2 class="tag" id="t-rsvp" data-rv="slam" style="--d:.3s" data-i18n="rsvp">CONFIRMA</h2>
+    <form id="rsvp" novalidate data-rv="up" style="--d:.2s">
+      <label for="f-name"><span data-i18n="yourName">TU NOMBRE</span>
+        <input id="f-name" name="name" autocomplete="name" placeholder="Ej. María Pérez" data-i18n-ph="namePh" required>
       </label>
-      <div>
-        <div class="choice" role="radiogroup" aria-label="¿Asistirás?">
-          <input type="radio" id="f-yes" name="go" value="si" checked><label for="f-yes">¡AHÍ ESTARÉ! 🍒</label>
-          <input type="radio" id="f-no" name="go" value="no"><label for="f-no">NO PODRÉ 💔</label>
-        </div>
+      <div class="choice" role="radiogroup" aria-label="¿Asistirás?" data-i18n-aria="attend">
+        <input type="radio" id="f-yes" name="go" value="si" checked><label for="f-yes" data-i18n="yes">¡AHÍ ESTARÉ! 🍒</label>
+        <input type="radio" id="f-no" name="go" value="no"><label for="f-no" data-i18n="no">NO PODRÉ 💔</label>
       </div>
-      <label for="f-count">¿CUÁNTAS PERSONAS?
+      <label for="f-count" id="countLabel"><span data-i18n="howMany">¿CUÁNTAS PERSONAS?</span>
         <select id="f-count" name="count">
           <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
         </select>
       </label>
-      <label for="f-msg">MENSAJE PARA DYLKA (OPCIONAL)
-        <textarea id="f-msg" name="msg" rows="3" placeholder="¡Feliz 60!"></textarea>
+      <label for="f-msg"><span data-i18n="message">MENSAJE PARA DYLKA (OPCIONAL)</span>
+        <textarea id="f-msg" name="msg" rows="3" placeholder="¡Feliz 60!" data-i18n-ph="msgPh"></textarea>
       </label>
-      <a class="btn red" id="wa" href="https://wa.me/50763730129" target="_blank" rel="noopener">ENVIAR POR WHATSAPP</a>
+      <a class="btn red" id="wa" href="https://wa.me/50763730129" target="_blank" rel="noopener" data-i18n="send">ENVIAR POR WHATSAPP</a>
     </form>
-    <div class="sign">con amor, Dylka</div>
-    <img class="kiss" src="img/lips_red.webp" alt="">
-    <div class="phrase">Wild &amp; Cherry Sweet at 60</div>
-    <img class="mirror bl" src="img/mirror_frame.webp" alt="">
+    <div><div class="sign" data-rv="wipe" data-i18n="love">con amor, Dylka</div></div>
+    <img class="kiss" data-rv="stamp" style="--d:.5s" src="img/lips_red.webp" alt="">
+    <div class="phrase" data-rv="up" style="--d:.7s">Wild &amp; Cherry Sweet at 60</div>
+    <img class="mirror bl" data-rv="left" style="--d:.3s" src="img/mirror_frame.webp" alt="">
   </section>
 </main>
 
 <audio id="song" src="audio/fiesta.mp3" preload="auto" loop></audio>
-<button class="music" id="music" type="button" aria-label="Música: activar o pausar" aria-pressed="false"></button>
+<button class="music" id="music" type="button" aria-label="Música: activar o pausar" data-i18n-aria="music" aria-pressed="false"></button>
 
 <script>
 (() => {
+  const root = document.documentElement;
+  root.classList.add('js');
   const cover = document.getElementById('cover');
   const body = document.body;
   body.classList.add('locked');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---- música: "Fiesta" ---- */
+  /* ---------- idioma ---------- */
+  const T = {
+    es: {
+      openInvite: 'Abrir la invitación', invited: 'TIENES UNA INVITACIÓN', openMe: 'ÁBREME', hint: 'Toca el beso · con música 🎶',
+      wild: '¡NOCHE SALVAJE!', heartDate: 'LUNES<br>4 ENE<br>2027', heartAge: 'MIS<br>60<br>AÑOS',
+      countdown: 'FALTAN', days: 'DÍAS', hours: 'HORAS', mins: 'MIN', secs: 'SEG',
+      countNote: 'para la noche más salvaje del año', today: '¡Hoy es la fiesta! 🍒',
+      party: 'LA FIESTA', seeYou: 'te espero', when: 'CUÁNDO', date: 'LUNES 4 DE ENERO · 2027', where: 'DÓNDE', directions: '📍 CÓMO LLEGAR',
+      comeWild: 'ven salvaje', ladies: 'ELLAS', gents: 'ELLOS', safari: 'ESTILO SAFARI',
+      rsvp: 'CONFIRMA', yourName: 'TU NOMBRE', namePh: 'Ej. María Pérez', attend: '¿Asistirás?', yes: '¡AHÍ ESTARÉ! 🍒', no: 'NO PODRÉ 💔',
+      howMany: '¿CUÁNTAS PERSONAS?', message: 'MENSAJE PARA DYLKA (OPCIONAL)', msgPh: '¡Feliz 60!', send: 'ENVIAR POR WHATSAPP',
+      love: 'con amor, Dylka', music: 'Música: activar o pausar', noName: '(sin nombre)',
+      waYes: (n, c) => `¡Hola Dylka! 🍒 Soy ${n} y confirmo mi asistencia a Wild & Cherry Sweet at 60 (lunes 4 de enero, Bahía Bistro). Seremos ${c} persona(s).`,
+      waNo: n => `¡Hola Dylka! Soy ${n}. Lamentablemente no podré asistir a Wild & Cherry Sweet at 60. ¡Te deseo una noche increíble!`
+    },
+    en: {
+      openInvite: 'Open the invitation', invited: "YOU'RE INVITED", openMe: 'OPEN ME', hint: 'Tap the kiss · with music 🎶',
+      wild: 'A WILD NIGHT!', heartDate: 'MON<br>JAN 4<br>2027', heartAge: "I'M<br>TURNING<br>60",
+      countdown: 'COUNTDOWN', days: 'DAYS', hours: 'HOURS', mins: 'MIN', secs: 'SEC',
+      countNote: 'until the wildest night of the year', today: "It's party day! 🍒",
+      party: 'THE PARTY', seeYou: 'see you there', when: 'WHEN', date: 'MONDAY, JANUARY 4 · 2027', where: 'WHERE', directions: '📍 GET DIRECTIONS',
+      comeWild: 'come wild', ladies: 'LADIES', gents: 'GENTS', safari: 'SAFARI STYLE',
+      rsvp: 'RSVP', yourName: 'YOUR NAME', namePh: 'e.g. Mary Smith', attend: 'Will you attend?', yes: "I'LL BE THERE! 🍒", no: "CAN'T MAKE IT 💔",
+      howMany: 'HOW MANY GUESTS?', message: 'MESSAGE FOR DYLKA (OPTIONAL)', msgPh: 'Happy 60th!', send: 'SEND VIA WHATSAPP',
+      love: 'with love, Dylka', music: 'Music: play or pause', noName: '(no name)',
+      waYes: (n, c) => `Hi Dylka! 🍒 This is ${n}, and I'm confirming for Wild & Cherry Sweet at 60 (Monday, January 4, Bahía Bistro). We'll be ${c} guest(s).`,
+      waNo: n => `Hi Dylka! This is ${n}. Unfortunately I can't make it to Wild & Cherry Sweet at 60. Wishing you an amazing night!`
+    }
+  };
+  let lang = 'es';
+  try { const q = new URLSearchParams(location.search).get('lang'); const s = localStorage.getItem('dylka-lang');
+    lang = (q === 'en' || q === 'es') ? q : (s === 'en' || s === 'es') ? s : (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'es'; } catch (e) {}
+  function setLang(l) {
+    lang = l; root.lang = l; const t = T[l];
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t[el.dataset.i18n]; });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t[el.dataset.i18nHtml]; });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t[el.dataset.i18nPh]; });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t[el.dataset.i18nAria]); });
+    document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
+    try { localStorage.setItem('dylka-lang', l); } catch (e) {}
+    tick(true); buildLink();
+  }
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+  /* ---------- música ---------- */
   const song = document.getElementById('song');
   const musicBtn = document.getElementById('music');
   let playing = false;
@@ -332,58 +453,104 @@
   function stopMusic() { song.pause(); setOn(false); }
   musicBtn.addEventListener('click', () => playing ? stopMusic() : startMusic());
 
-  /* ---- apertura ---- */
+  /* ---------- apertura ---------- */
   function countUp() {
     const el = document.getElementById('sixty'); let n = 0;
-    setTimeout(() => { const id = setInterval(() => { n += 3; el.textContent = Math.min(n, 60); if (n >= 60) clearInterval(id); }, 45); }, 1300);
+    setTimeout(() => { const id = setInterval(() => { n += 3; el.textContent = Math.min(n, 60); if (n >= 60) clearInterval(id); }, 45); }, 1550);
   }
   document.getElementById('open').addEventListener('click', () => {
-    cover.classList.add('gone'); body.classList.remove('locked'); body.classList.add('opened');
-    window.scrollTo(0, 0); countUp(); startMusic();
-    setTimeout(() => cover.hidden = true, 1000);
+    startMusic();
+    cover.classList.add('kissing');
+    document.getElementById('flash').classList.add('go');
+    cover.classList.add('gone');
+    setTimeout(() => {
+      body.classList.remove('locked'); body.classList.add('opened'); window.scrollTo(0, 0); countUp(); burst();
+      document.getElementById('langMini').hidden = false;
+    }, 350);
+    setTimeout(() => { cover.hidden = true; }, 1400);
   });
 
-  /* ---- cuenta regresiva (hora de Panamá, UTC-5) ---- */
+  /* ---------- escenas al hacer scroll ---------- */
+  const items = document.querySelectorAll('[data-rv]');
+  if ('IntersectionObserver' in window && !reduce) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting && body.classList.contains('opened')) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+    items.forEach(el => io.observe(el));
+    // al abrir, revisar lo que ya está a la vista
+    document.getElementById('open').addEventListener('click', () => setTimeout(() => items.forEach(el => { io.unobserve(el); io.observe(el); }), 400));
+  } else { items.forEach(el => el.classList.add('in')); }
+
+  /* ---------- confeti, brillos y corazones ---------- */
+  const cv = document.getElementById('fx'), cx = cv.getContext('2d');
+  let W = 0, H = 0, parts = [];
+  const DPR = Math.min(2, window.devicePixelRatio || 1);
+  function size() { W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+  size(); addEventListener('resize', size);
+  const COLORS = ['#e9c46a', '#f5d98b', '#c8102e', '#fff8ee', '#b8860b'];
+  function make(burstMode) {
+    const kind = Math.random() < .14 ? 'heart' : Math.random() < .35 ? 'spark' : 'confetti';
+    return { kind, x: burstMode ? W / 2 + (Math.random() - .5) * 60 : Math.random() * W, y: burstMode ? H * .35 : -20 - Math.random() * H * .5,
+      vx: burstMode ? (Math.random() - .5) * 9 : (Math.random() - .5) * .6, vy: burstMode ? -4 - Math.random() * 7 : .6 + Math.random() * 1.2,
+      s: kind === 'heart' ? 7 + Math.random() * 6 : 3 + Math.random() * 4, r: Math.random() * 6, vr: (Math.random() - .5) * .2,
+      c: kind === 'heart' ? '#c8102e' : COLORS[Math.floor(Math.random() * COLORS.length)], t: Math.random() * 6, life: burstMode ? 1 : Infinity };
+  }
+  function heart(x, y, s) { cx.beginPath(); cx.moveTo(x, y + s * .3); cx.bezierCurveTo(x, y, x - s * .5, y - s * .3, x - s * .5, y + s * .1);
+    cx.bezierCurveTo(x - s * .5, y + s * .5, x, y + s * .7, x, y + s); cx.bezierCurveTo(x, y + s * .7, x + s * .5, y + s * .5, x + s * .5, y + s * .1);
+    cx.bezierCurveTo(x + s * .5, y - s * .3, x, y, x, y + s * .3); cx.fill(); }
+  function burst() { for (let i = 0; i < 90; i++) parts.push(make(true)); }
+  for (let i = 0; i < 38; i++) parts.push(make(false));
+  function frame() {
+    cx.clearRect(0, 0, W, H);
+    parts.forEach(p => {
+      p.t += .05; p.r += p.vr;
+      if (p.life !== Infinity) { p.vy += .18; p.vx *= .99; p.life -= .008; }
+      p.x += p.vx + Math.sin(p.t) * .4; p.y += p.vy;
+      cx.globalAlpha = Math.max(0, Math.min(1, p.life)) * (p.kind === 'spark' ? (.5 + .5 * Math.sin(p.t * 3)) : .85);
+      cx.fillStyle = p.c;
+      if (p.kind === 'heart') heart(p.x, p.y, p.s);
+      else if (p.kind === 'spark') { cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillRect(-p.s, -.6, p.s * 2, 1.2); cx.fillRect(-.6, -p.s, 1.2, p.s * 2); cx.restore(); }
+      else { cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); cx.restore(); }
+      if (p.life === Infinity && p.y > H + 20) { Object.assign(p, make(false), { y: -20 }); }
+    });
+    parts = parts.filter(p => p.life > 0 && p.y < H + 60 || p.life === Infinity);
+    cx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  if (!reduce) requestAnimationFrame(frame);
+
+  /* ---------- cuenta regresiva (hora de Panamá, UTC-5) ---------- */
   const target = Date.parse('2027-01-04T00:00:00-05:00');
   const pad = n => String(n).padStart(2, '0');
-  function tick() {
+  const last = {};
+  function put(id, v) { const el = document.getElementById(id); if (last[id] === v) return; last[id] = v; el.textContent = v;
+    el.classList.remove('flip'); void el.offsetWidth; el.classList.add('flip'); }
+  function tick(force) {
     let d = Math.max(0, target - Date.now());
-    if (d === 0) { document.getElementById('count-note').textContent = '¡Hoy es la fiesta! 🍒'; }
+    const note = document.getElementById('count-note');
+    if (d === 0) note.textContent = T[lang].today; else if (force) note.textContent = T[lang].countNote;
     const days = Math.floor(d / 864e5); d -= days * 864e5;
     const h = Math.floor(d / 36e5); d -= h * 36e5;
     const m = Math.floor(d / 6e4); d -= m * 6e4;
-    document.getElementById('cd-d').textContent = days;
-    document.getElementById('cd-h').textContent = pad(h);
-    document.getElementById('cd-m').textContent = pad(m);
-    document.getElementById('cd-s').textContent = pad(Math.floor(d / 1e3));
+    put('cd-d', String(days)); put('cd-h', pad(h)); put('cd-m', pad(m)); put('cd-s', pad(Math.floor(d / 1e3)));
   }
-  tick(); setInterval(tick, 1000);
+  setInterval(tick, 1000);
 
-  /* ---- confirmación por WhatsApp ---- */
+  /* ---------- confirmación por WhatsApp ---------- */
   const form = document.getElementById('rsvp'), wa = document.getElementById('wa');
   function buildLink() {
-    const name = form.name.value.trim() || '(sin nombre)';
-    const go = form.go.value === 'si';
+    const t = T[lang];
+    const name = form.name.value.trim() || t.noName;
+    let text = form.go.value === 'si' ? t.waYes(name, form.count.value) : t.waNo(name);
     const msg = form.msg.value.trim();
-    let text = go
-      ? `¡Hola Dylka! 🍒 Soy ${name} y confirmo mi asistencia a Wild & Cherry Sweet at 60 (lunes 4 de enero, Bahía Bistro). Seremos ${form.count.value} persona(s).`
-      : `¡Hola Dylka! Soy ${name}. Lamentablemente no podré asistir a Wild & Cherry Sweet at 60. ¡Te deseo una noche increíble!`;
     if (msg) text += `\n\n${msg}`;
     wa.href = 'https://wa.me/50763730129?text=' + encodeURIComponent(text);
   }
-  form.addEventListener('input', buildLink); form.addEventListener('change', buildLink);
+  form.addEventListener('input', buildLink);
+  form.addEventListener('change', () => { buildLink(); document.getElementById('countLabel').hidden = form.go.value !== 'si'; });
   form.addEventListener('submit', e => e.preventDefault());
-  buildLink();
-  document.getElementById('f-count').closest('label').hidden = false;
-  form.addEventListener('change', () => { document.getElementById('f-count').closest('label').hidden = form.go.value !== 'si'; });
 
-  document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', () => {
-    const v = b.dataset.copy;
-    (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(
-      () => { b.textContent = 'Copiado'; setTimeout(() => b.textContent = 'Copiar', 1500); },
-      () => { const r = document.createRange(); r.selectNodeContents(b.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
-    );
-  }));
+  setLang(lang);
 })();
 </script>
 
