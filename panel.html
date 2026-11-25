@@ -10,6 +10,7 @@
 <style>
   :root{--noche:#0f0a09;--caja:rgba(26,18,16,.92);--cereza:#c8102e;--oro:#e9c46a;--texto:#fff8ee;--suave:#c9b9a6;--borde:#3a2a24;--ok:#3fae6a;--no:#e0555f;--espera:#c9a227}
   *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
   body{font-family:'Montserrat',sans-serif;color:var(--texto);background:linear-gradient(180deg,rgba(15,10,9,.88),rgba(15,10,9,.96)),url("img/bg_leopard.webp") center/cover fixed;background-color:var(--noche);min-height:100vh;padding:24px 16px 60px}
   .contenedor{max-width:860px;margin:0 auto}
   header{text-align:center;margin-bottom:22px}
@@ -63,15 +64,15 @@
   <header>
     <h1>DYLKA</h1>
     <div class="script">Wild &amp; Cherry Sweet at 60</div>
-    <p>Panel de invitados · Lunes 4 de enero de 2027</p>
+    <p>Panel de invitados · Lunes 4 de enero de 2027 · 5:00 a 10:00 p. m.</p>
   </header>
 
   <div class="resumen">
     <div class="dato"><b id="totInvitados">0</b><span>Invitaciones</span></div>
     <div class="dato"><b id="totPuestos">0</b><span>Puestos</span></div>
-    <div class="dato ok"><b id="totSi">0</b><span>Confirmados</span></div>
-    <div class="dato no"><b id="totNo">0</b><span>No asisten</span></div>
-    <div class="dato espera"><b id="totEspera">0</b><span>Pendientes</span></div>
+    <div class="dato ok"><b id="totSi">0</b><span>Personas confirmadas</span></div>
+    <div class="dato no"><b id="totNo">0</b><span>Invitaciones que no asisten</span></div>
+    <div class="dato espera"><b id="totEspera">0</b><span>Invitaciones pendientes</span></div>
   </div>
 
   <div class="caja">
@@ -106,6 +107,19 @@
     <p class="ayuda">Cuando un invitado te confirme por WhatsApp, cambia su estado aquí.</p>
   </div>
 
+  <div class="caja" id="cajaLinea">
+    <div class="barra">
+      <h2 style="margin:0">Confirmaciones desde la invitación</h2>
+      <button class="btn claro mini" id="actualizar" type="button">↻ Actualizar</button>
+    </div>
+    <p class="ayuda" id="lineaEstado">Conectando…</p>
+    <form class="fila" id="formClave" style="grid-template-columns:1fr auto;margin-top:10px" hidden>
+      <div><label for="clave">Clave del panel</label><input id="clave" type="password" autocomplete="current-password"></div>
+      <button class="btn" type="submit">Conectar</button>
+    </form>
+    <div class="lista" id="listaLinea" style="margin-top:12px"></div>
+  </div>
+
   <div class="caja">
     <h2>Mensaje para enviar</h2>
     <label for="plantilla">Texto en español (usa {nombre}, {puestos} y {enlace})</label>
@@ -129,16 +143,21 @@
 </div>
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
+<script src="config.js"></script>
 <script>
   const BASE = 'https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/';
   const CLAVE = 'panel-dylka-60';
-  const TEXTO = '¡Hola {nombre}! 🍒\nCon mucho cariño te invito a celebrar mis 60: Wild & Cherry Sweet, el lunes 4 de enero de 2027 en Bahía Bistro, Nueva Gorgona.\nHe reservado {puestos} para ti.\n\nAquí está tu invitación:\n{enlace}';
-  const TEXTO_EN = "Hi {nombre}! 🍒\nI'd love for you to celebrate my 60th with me: Wild & Cherry Sweet, Monday, January 4, 2027 at Bahía Bistro, Nueva Gorgona.\nI've reserved {puestos} for you.\n\nHere's your invitation:\n{enlace}";
+  const TEXTO_V1 = '¡Hola {nombre}! 🍒\nCon mucho cariño te invito a celebrar mis 60: Wild & Cherry Sweet, el lunes 4 de enero de 2027 en Bahía Bistro, Nueva Gorgona.\nHe reservado {puestos} para ti.\n\nAquí está tu invitación:\n{enlace}';
+  const TEXTO = '¡Hola {nombre}! 🍒\nCon mucho cariño te invito a celebrar mis 60: Wild & Cherry Sweet, el lunes 4 de enero de 2027, de 5:00 a 10:00 p. m., en Bahía Bistro, Nueva Gorgona.\nHe reservado {puestos} para ti.\n\nAquí está tu invitación:\n{enlace}';
+  const TEXTO_EN_V1 = "Hi {nombre}! 🍒\nI'd love for you to celebrate my 60th with me: Wild & Cherry Sweet, Monday, January 4, 2027 at Bahía Bistro, Nueva Gorgona.\nI've reserved {puestos} for you.\n\nHere's your invitation:\n{enlace}";
+  const TEXTO_EN = "Hi {nombre}! 🍒\nI'd love for you to celebrate my 60th with me: Wild & Cherry Sweet, Monday, January 4, 2027, from 5:00 to 10:00 PM at Bahía Bistro, Nueva Gorgona.\nI've reserved {puestos} for you.\n\nHere's your invitation:\n{enlace}";
   const ESTADOS = { espera: 'Pendiente', si: 'Confirmado', no: 'No asiste' };
 
   const leer = () => { try { return JSON.parse(localStorage.getItem(CLAVE)) || {}; } catch { return {}; } };
   const datos = Object.assign({ invitados: [], plantilla: TEXTO, plantillaEn: TEXTO_EN }, leer());
   const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch {} };
+  if (datos.plantilla === TEXTO_V1) datos.plantilla = TEXTO;
+  if (datos.plantillaEn === TEXTO_EN_V1) datos.plantillaEn = TEXTO_EN;
 
   const enlace = g => BASE + '?' + new URLSearchParams(Object.assign({ n: g.nombre, p: g.puestos }, g.idioma === 'en' ? { lang: 'en' } : {}));
   const puestosTxt = (n, en) => en ? (n == 1 ? '1 seat' : n + ' seats') : (n == 1 ? '1 puesto' : n + ' puestos');
@@ -164,14 +183,15 @@
           <button class="btn mini claro" data-acc="ver">Ver</button>
           <button class="btn mini peligro" data-acc="borrar">Quitar</button>
         </div>
-        <div class="enlace">${esc(enlace(g))}${g.tel ? ' · 📱 ' + esc(g.tel) : ''}${g.idioma === 'en' ? ' · English' : ''}</div>
+        <div class="enlace">${g.estado === 'si' && g.personas ? '✅ ' + (+g.personas) + ' de ' + (+g.puestos || 1) + ' confirmados' + (g.enLinea ? ' (desde la invitación)' : '') + ' · ' : ''}${g.estado === 'no' && g.enLinea ? '❌ Respondió desde la invitación · ' : ''}${g.mensaje ? '💬 “' + esc(g.mensaje) + '” · ' : ''}${esc(enlace(g))}${g.tel ? ' · 📱 ' + esc(g.tel) : ''}${g.idioma === 'en' ? ' · English' : ''}</div>
       </div>`).join('') : `<p class="vacio">${datos.invitados.length ? 'Nadie coincide con la búsqueda.' : 'Aún no hay invitados. Agrega el primero arriba.'}</p>`;
     const inv = datos.invitados, suma = arr => arr.reduce((s, g) => s + (+g.puestos || 0), 0);
     document.getElementById('totInvitados').textContent = inv.length;
     document.getElementById('totPuestos').textContent = suma(inv);
-    document.getElementById('totSi').textContent = suma(inv.filter(g => g.estado === 'si'));
-    document.getElementById('totNo').textContent = suma(inv.filter(g => g.estado === 'no'));
-    document.getElementById('totEspera').textContent = suma(inv.filter(g => !g.estado || g.estado === 'espera'));
+    const fuera = linea.filter(r => r.asiste === 'si' && !buscarInvitado(r.nombre)).reduce((s, r) => s + (+r.personas || 0), 0);
+    document.getElementById('totSi').textContent = inv.filter(g => g.estado === 'si').reduce((s, g) => s + (+(g.personas || g.puestos) || 0), 0) + fuera;
+    document.getElementById('totNo').textContent = inv.filter(g => g.estado === 'no').length;
+    document.getElementById('totEspera').textContent = inv.filter(g => !g.estado || g.estado === 'espera').length;
   }
 
   document.getElementById('formNuevo').addEventListener('submit', e => {
@@ -191,7 +211,7 @@
     if (!fila || !campo) return;
     const g = datos.invitados[fila.dataset.k];
     if (campo === 'puestos') g.puestos = Math.max(1, Math.min(20, parseInt(e.target.value, 10) || 1));
-    else if (campo === 'estado') g.estado = e.target.value in ESTADOS ? e.target.value : 'espera';
+    else if (campo === 'estado') { g.estado = e.target.value in ESTADOS ? e.target.value : 'espera'; g.personas = g.estado === 'si' ? (+g.personas || +g.puestos || 1) : 0; g.enLinea = false; }
     else g.nombre = e.target.value.trim() || g.nombre;
     guardar(); pintar(); aviso(campo === 'estado' ? 'Estado: ' + ESTADOS[g.estado] : 'Cambios guardados');
   });
@@ -240,7 +260,51 @@
     e.target.value = '';
   });
 
-  pintar();
+  /* ---------- confirmaciones desde la invitación (Google Sheets) ---------- */
+  const SCRIPT = String((window.DYLKA_CONFIG && window.DYLKA_CONFIG.scriptUrl) || '').trim();
+  const CLAVE_KEY = 'panel-dylka-60-clave';
+  let linea = [];
+  const normal = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  function buscarInvitado(nombre) { const n = normal(nombre); return datos.invitados.find(g => normal(g.nombre) === n); }
+  function claveGuardada() { try { return localStorage.getItem(CLAVE_KEY) || ''; } catch { return ''; } }
+  function pintarLinea() {
+    const caja = document.getElementById('listaLinea');
+    const orden = [...linea].sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
+    caja.innerHTML = orden.length ? orden.map(r => {
+      const f = new Date(r.fecha), en = buscarInvitado(r.nombre);
+      return `<div class="invitado ${r.asiste === 'si' ? 'si' : 'no'}" style="grid-template-columns:1fr auto">
+        <div><b>${esc(r.nombre)}</b> · ${r.asiste === 'si' ? 'Asiste · ' + (+r.personas || 0) + ' persona(s)' : 'No asiste'}${en ? '' : ' · <i>no está en tu lista</i>'}</div>
+        <div class="ayuda" style="margin:0">${isNaN(f) ? '' : f.toLocaleString('es-PA', { dateStyle: 'medium', timeStyle: 'short' })}</div>
+        ${r.mensaje ? `<div class="enlace">💬 “${esc(r.mensaje)}”</div>` : ''}
+      </div>`;
+    }).join('') : '<p class="vacio">Todavía nadie ha confirmado desde la invitación.</p>';
+  }
+  async function cargarLinea() {
+    const estado = document.getElementById('lineaEstado');
+    if (!SCRIPT) { estado.textContent = 'Las confirmaciones desde la invitación aún no están activadas. Mientras tanto, cambia el estado de cada invitado a mano.'; document.getElementById('actualizar').hidden = true; return; }
+    const clave = claveGuardada();
+    if (!clave) { estado.textContent = 'Escribe la clave del panel una sola vez para ver las confirmaciones.'; document.getElementById('formClave').hidden = false; return; }
+    try {
+      const u = new URL(SCRIPT); u.searchParams.set('action', 'list'); u.searchParams.set('key', clave);
+      const j = await (await fetch(u.href)).json();
+      if (!j.ok) { if (j.error === 'clave') { try { localStorage.removeItem(CLAVE_KEY); } catch {} document.getElementById('formClave').hidden = false; estado.textContent = 'La clave no es correcta. Escríbela de nuevo.'; return; } throw new Error(j.error); }
+      linea = j.rsvps || [];
+      linea.forEach(r => { const g = buscarInvitado(r.nombre); if (g) { g.estado = r.asiste === 'si' ? 'si' : 'no'; g.personas = +r.personas || 0; g.mensaje = r.mensaje || ''; g.enLinea = true; } });
+      guardar(); pintar(); pintarLinea();
+      document.getElementById('formClave').hidden = true;
+      estado.textContent = `${linea.length} respuesta(s) recibidas. Se actualiza solo cada minuto · última vez ${new Date().toLocaleTimeString('es-PA', { hour: 'numeric', minute: '2-digit' })}`;
+    } catch (err) { estado.textContent = 'No se pudieron leer las confirmaciones. Revisa tu conexión y toca Actualizar.'; }
+  }
+  document.getElementById('formClave').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = document.getElementById('clave').value.trim(); if (!v) return;
+    try { localStorage.setItem(CLAVE_KEY, v); } catch {}
+    document.getElementById('clave').value = ''; cargarLinea();
+  });
+  document.getElementById('actualizar').addEventListener('click', cargarLinea);
+  setInterval(() => { if (SCRIPT && !document.hidden) cargarLinea(); }, 60000);
+
+  pintar(); pintarLinea(); cargarLinea();
 </script>
 </body>
 </html>

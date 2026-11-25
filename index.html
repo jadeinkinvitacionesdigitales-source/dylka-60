@@ -9,10 +9,10 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Wild &amp; Cherry Sweet at 60">
 <meta property="og:title" content="Dylka · Wild &amp; Cherry Sweet at 60 🍒">
-<meta property="og:description" content="¡Estás invitada/o! Lunes 4 de enero de 2027 · Bahía Bistro, Nueva Gorgona. Toca para abrir tu invitación.">
+<meta property="og:description" content="¡Estás invitada/o! Lunes 4 de enero de 2027 · 5:00 a 10:00 p. m. · Bahía Bistro, Nueva Gorgona. Toca para abrir tu invitación.">
 <meta property="og:url" content="https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/">
-<meta property="og:image" content="https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/preview.jpg">
-<meta property="og:image:secure_url" content="https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/preview.jpg">
+<meta property="og:image" content="https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/preview.jpg?v=2">
+<meta property="og:image:secure_url" content="https://jadeinkinvitacionesdigitales-source.github.io/dylka-60/preview.jpg?v=2">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -21,7 +21,7 @@
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0706">
-<meta name="description" content="Estás invitada/o a celebrar los 60 de Dylka: Wild & Cherry Sweet. Lunes 4 de enero de 2027, Bahía Bistro, Nueva Gorgona.">
+<meta name="description" content="Estás invitada/o a celebrar los 60 de Dylka: Wild & Cherry Sweet. Lunes 4 de enero de 2027, de 5:00 a 10:00 p. m., Bahía Bistro, Nueva Gorgona.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@500;600;800;900&family=Pinyon+Script&display=swap">
@@ -98,6 +98,7 @@
   .seal:focus-visible { outline: 3px solid var(--gold); outline-offset: 10px; }
   .cover.kissing .seal { animation: none; }
   .cover.kissing .seal img { animation: kissZoom .7s cubic-bezier(.6,0,.4,1) forwards; }
+  .cover-date { font-weight: 800; letter-spacing: .16em; font-size: .74rem; color: var(--ink); background: rgba(200,16,46,.85); border: 2px solid var(--ink); border-radius: 999px; padding: 7px 14px; }
   .cover .hint { font-size: .8rem; color: var(--cream); opacity: .8; }
   @keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.07); } 30% { transform: scale(.98); } 45% { transform: scale(1.04); } }
   @keyframes ring { from { opacity: .9; scale: 1; } to { opacity: 0; scale: 1.45; } }
@@ -218,6 +219,7 @@
   .card { background: var(--card); border: 2px solid var(--gold); border-radius: 26px; padding: 18px 20px; }
   .lab { display: inline-block; background: var(--cherry); border: 3px solid var(--ink); font-family: var(--f-slam); font-size: 1.4rem; line-height: 1; padding: 5px 14px 2px; margin-bottom: 10px; }
   .big { font-weight: 900; font-size: 1.2rem; letter-spacing: .02em; line-height: 1.2; }
+  .small.time { font-weight: 800; font-size: 1.05rem; color: var(--gold); letter-spacing: .02em; }
   .small { font-weight: 500; font-size: .95rem; color: var(--cream); margin-top: 4px; line-height: 1.4; }
   .btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 12px 20px; border-radius: 999px; border: 3px solid var(--ink);
     background: var(--gold); color: var(--night); font-weight: 900; font-size: .9rem; letter-spacing: .06em; text-decoration: none; cursor: pointer; font-family: var(--f-body);
@@ -296,6 +298,7 @@
     <div class="guest" id="guestCover" hidden><small data-i18n="forYou">ESTA INVITACIÓN ES PARA</small><strong id="guestName"></strong><span id="guestSeats"></span></div>
     <h1>DYLKA</h1>
     <div class="when">Wild &amp; Cherry Sweet at 60</div>
+    <div class="cover-date" data-i18n="coverDate">LUNES 4 DE ENERO · 5:00 A 10:00 P. M.</div>
     <button class="seal" id="open" type="button" aria-label="Abrir la invitación" data-i18n-aria="openInvite">
       <img src="img/lips_red.webp" alt="">
       <span data-i18n="openMe">ÁBREME</span>
@@ -321,7 +324,7 @@
     <div class="age"><span class="at">at</span><span class="sixty" id="sixty">60</span></div>
     <div class="stage">
     <div class="xo">xoxo</div>
-    <div class="heart h1"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartDate">LUNES<br>4 ENE<br>2027</b></div>
+    <div class="heart h1"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartDate">LUNES<br>4 ENE<br>5 P. M.</b></div>
     <div class="heart h2"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 2 50 2 28 2 12 14 2 28 2c10 0 18 6 22 14 4-8 12-14 22-14 14 0 26 10 26 26 0 22-18 38-48 60Z" fill="#c8102e" stroke="#fff8ee" stroke-width="3"/></svg><b data-i18n-html="heartAge">MIS<br>60<br>AÑOS</b></div>
     <div class="photo"><img src="img/dylka.webp" alt="Dylka" width="760" height="1107"></div>
     </div>
@@ -350,6 +353,7 @@
       <div class="card" data-rv="left" style="--d:.1s">
         <div class="lab" data-i18n="when">CUÁNDO</div>
         <div class="big" data-i18n="date">LUNES 4 DE ENERO · 2027</div>
+        <div class="small time" data-i18n="time">De 5:00 p. m. a 10:00 p. m.</div>
       </div>
       <div class="card" data-rv="right" style="--d:.25s">
         <div class="lab" data-i18n="where">DÓNDE</div>
@@ -430,15 +434,15 @@
   const T = {
     es: {
       openInvite: 'Abrir la invitación', invited: 'TIENES UNA INVITACIÓN', openMe: 'ÁBREME', hint: 'Toca el beso · con música 🎶',
-      wild: '¡NOCHE SALVAJE!', heartDate: 'LUNES<br>4 ENE<br>2027', heartAge: 'MIS<br>60<br>AÑOS',
+      wild: '¡NOCHE SALVAJE!', heartDate: 'LUNES<br>4 ENE<br>5 P. M.', heartAge: 'MIS<br>60<br>AÑOS',
       countdown: 'FALTAN', days: 'DÍAS', hours: 'HORAS', mins: 'MIN', secs: 'SEG',
       countNote: 'para la noche más salvaje del año', today: '¡Hoy es la fiesta! 🍒',
-      party: 'LA FIESTA', seeYou: 'te espero', when: 'CUÁNDO', date: 'LUNES 4 DE ENERO · 2027', where: 'DÓNDE', directions: '📍 CÓMO LLEGAR',
+      party: 'LA FIESTA', seeYou: 'te espero', when: 'CUÁNDO', date: 'LUNES 4 DE ENERO · 2027', time: 'De 5:00 p. m. a 10:00 p. m.', coverDate: 'LUNES 4 DE ENERO · 5:00 A 10:00 P. M.', where: 'DÓNDE', directions: '📍 CÓMO LLEGAR',
       comeWild: 'ven salvaje', ladies: 'ELLAS', gents: 'ELLOS', safari: 'ESTILO SAFARI',
       rsvp: 'CONFIRMA', yourName: 'TU NOMBRE', namePh: 'Ej. María Pérez', attend: '¿Asistirás?', yes: '¡AHÍ ESTARÉ! 🍒', no: 'NO PODRÉ 💔',
       howMany: '¿CUÁNTAS PERSONAS?', message: 'MENSAJE PARA DYLKA (OPCIONAL)', msgPh: '¡Feliz 60!', send: 'ENVIAR POR WHATSAPP',
       love: 'con amor, Dylka', music: 'Música: activar o pausar', noName: '(sin nombre)',
-      waYes: (n, c) => `¡Hola Dylka! 🍒 Soy ${n} y confirmo mi asistencia a Wild & Cherry Sweet at 60 (lunes 4 de enero, Bahía Bistro). Seremos ${c} persona(s).`,
+      waYes: (n, c) => `¡Hola Dylka! 🍒 Soy ${n} y confirmo mi asistencia a Wild & Cherry Sweet at 60 (lunes 4 de enero, 5:00 p. m., Bahía Bistro). Seremos ${c} persona(s).`,
       waNo: n => `¡Hola Dylka! Soy ${n}. Lamentablemente no podré asistir a Wild & Cherry Sweet at 60. ¡Te deseo una noche increíble!`,
       forYou: 'ESTA INVITACIÓN ES PARA', seats: p => p === 1 ? '1 PUESTO RESERVADO' : `${p} PUESTOS RESERVADOS`,
       seatsNote: p => p === 1 ? 'Tenemos 1 puesto reservado para ti' : `Tenemos ${p} puestos reservados para ti`,
@@ -449,15 +453,15 @@
     },
     en: {
       openInvite: 'Open the invitation', invited: "YOU'RE INVITED", openMe: 'OPEN ME', hint: 'Tap the kiss · with music 🎶',
-      wild: 'A WILD NIGHT!', heartDate: 'MON<br>JAN 4<br>2027', heartAge: "I'M<br>TURNING<br>60",
+      wild: 'A WILD NIGHT!', heartDate: 'MON<br>JAN 4<br>5 PM', heartAge: "I'M<br>TURNING<br>60",
       countdown: 'COUNTDOWN', days: 'DAYS', hours: 'HOURS', mins: 'MIN', secs: 'SEC',
       countNote: 'until the wildest night of the year', today: "It's party day! 🍒",
-      party: 'THE PARTY', seeYou: 'see you there', when: 'WHEN', date: 'MONDAY, JANUARY 4 · 2027', where: 'WHERE', directions: '📍 GET DIRECTIONS',
+      party: 'THE PARTY', seeYou: 'see you there', when: 'WHEN', date: 'MONDAY, JANUARY 4 · 2027', time: 'From 5:00 PM to 10:00 PM', coverDate: 'MONDAY, JANUARY 4 · 5 TO 10 PM', where: 'WHERE', directions: '📍 GET DIRECTIONS',
       comeWild: 'come wild', ladies: 'LADIES', gents: 'GENTS', safari: 'SAFARI STYLE',
       rsvp: 'RSVP', yourName: 'YOUR NAME', namePh: 'e.g. Mary Smith', attend: 'Will you attend?', yes: "I'LL BE THERE! 🍒", no: "CAN'T MAKE IT 💔",
       howMany: 'HOW MANY GUESTS?', message: 'MESSAGE FOR DYLKA (OPTIONAL)', msgPh: 'Happy 60th!', send: 'SEND VIA WHATSAPP',
       love: 'with love, Dylka', music: 'Music: play or pause', noName: '(no name)',
-      waYes: (n, c) => `Hi Dylka! 🍒 This is ${n}, and I'm confirming for Wild & Cherry Sweet at 60 (Monday, January 4, Bahía Bistro). We'll be ${c} guest(s).`,
+      waYes: (n, c) => `Hi Dylka! 🍒 This is ${n}, and I'm confirming for Wild & Cherry Sweet at 60 (Monday, January 4, 5:00 PM, Bahía Bistro). We'll be ${c} guest(s).`,
       waNo: n => `Hi Dylka! This is ${n}. Unfortunately I can't make it to Wild & Cherry Sweet at 60. Wishing you an amazing night!`,
       forYou: 'THIS INVITATION IS FOR', seats: p => p === 1 ? '1 SEAT RESERVED' : `${p} SEATS RESERVED`,
       seatsNote: p => p === 1 ? 'We have 1 seat reserved for you' : `We have ${p} seats reserved for you`,
@@ -477,7 +481,7 @@
     const p = Math.max(1, Math.min(20, parseInt(qs.get('p'), 10) || 1));
     return { id: (qs.get('i') || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 40), name: n, seats: p };
   })();
-  const SAVE_KEY = 'dylka-rsvp-' + (guest && guest.id ? guest.id : 'general');
+  const SAVE_KEY = 'dylka-rsvp-' + (guest ? (guest.id || guest.name.toLowerCase()) : 'general');
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); } catch (e) {}
   let lang = 'es';
@@ -576,7 +580,7 @@
   if (!reduce) requestAnimationFrame(frame);
 
   /* ---------- cuenta regresiva (hora de Panamá, UTC-5) ---------- */
-  const target = Date.parse('2027-01-04T00:00:00-05:00');
+  const target = Date.parse('2027-01-04T17:00:00-05:00');
   const pad = n => String(n).padStart(2, '0');
   const last = {};
   function put(id, v) { const el = document.getElementById(id); if (last[id] === v) return; last[id] = v; el.textContent = v;
@@ -632,7 +636,7 @@
     const nombre = form.name.value.trim();
     if (!nombre) { msgEl.textContent = t.errName; msgEl.classList.add('err'); form.name.focus(); return; }
     const data = { action: 'rsvp', id: guest ? guest.id : '', nombre, asiste: form.go.value,
-      personas: form.go.value === 'si' ? Number(form.count.value) : 0, mensaje: form.msg.value.trim(), idioma: lang };
+      personas: form.go.value === 'si' ? Number(form.count.value) : 0, puestos: guest ? guest.seats : '', mensaje: form.msg.value.trim(), idioma: lang };
     sendBtn.disabled = true; msgEl.classList.remove('err'); msgEl.textContent = t.sending;
     try {
       const r = await fetch(SCRIPT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
